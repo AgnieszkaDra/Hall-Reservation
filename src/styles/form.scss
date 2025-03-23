@@ -1,0 +1,16 @@
+@use './abstracts/index' as *;
+
+.container {
+    &__forms {
+        border: 2px solid $color-veryLightGrey;;
+        height: 70vh;
+        
+        @media(min-width: 576px) {
+          margin: 0 auto;
+          padding: 40px;
+          border-radius: 3px;
+          padding-right: 15px;
+          padding-left: 15px;
+        }
+    }
+}

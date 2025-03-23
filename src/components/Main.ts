@@ -5,6 +5,9 @@ export const Main = (): HTMLElement => {
   const main = document.createElement("main");
   main.classList.add("main");
 
+  const container = document.createElement('div');
+  container.className = 'container';
+
   const form = new Form(); 
 
   const genderField = new SelectField(
@@ -12,11 +15,14 @@ export const Main = (): HTMLElement => {
   );
   form.addField(genderField);
 
-  const formContainer = document.createElement("div");
-  formContainer.classList.add("form__wrapper");
-  form.generate(formContainer);
+  const containerForms = document.createElement('div');
+  containerForms.className = 'container__forms';
 
-  main.append(formContainer);
+  container.append(containerForms)
+
+  form.generate(containerForms);
+
+  main.append(container);
 
   return main;
 };

@@ -1,4 +1,5 @@
 import HomePage from './pages/HomePage'
+import './styles/globals.scss'
 
 function renderApp() {
   const app = document.querySelector("#app");
