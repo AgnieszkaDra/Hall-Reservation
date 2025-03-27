@@ -6,10 +6,15 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "json-server --watch db.json --port 4000"
   },
   "devDependencies": {
+    "sass-embedded": "^1.86.0",
     "typescript": "~5.7.2",
     "vite": "^6.2.0"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.7.2"
   }
 }

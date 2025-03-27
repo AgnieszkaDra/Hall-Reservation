@@ -1,5 +1,3 @@
-
-  
   export function AdminPage(): string {
     return `<h1>Admin Dashboard</h1>`;
   }

@@ -1,0 +1,28 @@
+{
+    "halls": [
+        {
+        "name": "Sala Sw. Augustyna",
+        "openinghours":  {
+            "start": "10:00",
+            "end": "22:00"
+        },
+        "openingdays": ["monday", "tuesday",  "thursday", "friday", "saturday"]
+        },
+        {
+        "name": "Sala Aniołów",
+        "openinghours":  {
+            "start": "09:00",
+            "end": "14:00"
+        },
+        "openingdays": ["wednesday", "thursday", "friday", "saturday"]
+        },
+        {
+        "name": "Sala Św. Michała",
+        "openinghours":  {
+            "start": "10:00",
+            "end": "22:00"
+        },
+        "openingdays": ["wednesday", "thursday", "friday", "saturday"]
+        }
+    ]
+}

@@ -1,5 +1,5 @@
-import { Field } from "../ui/Field";
-import '../styles/form.scss'
+import { Field } from '../../ui/Field';
+import '../../styles/form.scss'
 
 export class Form {
     private fields: Field[];
