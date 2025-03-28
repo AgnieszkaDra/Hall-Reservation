@@ -1,7 +1,7 @@
 import { fetchHalls } from "../api/fetchHalls";
 import { Hall } from "../types/Hall";
 import createTitle from "../typography/createTitle";
-import { CalendarModal } from "./calendar/Calendar";
+import { CalendarModal } from "./calendar/CalendarModal";
 import "../styles/main.scss";
 
 export const Halls = async (): Promise<HTMLElement> => {
@@ -35,6 +35,7 @@ export const Halls = async (): Promise<HTMLElement> => {
     link.addEventListener("click", (event: Event) => {
       event.preventDefault();
       openCalendar(hall);
+      //CalendarModal()
     });
 
     listItem.appendChild(listItemDescription);
