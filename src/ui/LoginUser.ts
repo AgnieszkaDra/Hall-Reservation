@@ -1,9 +1,12 @@
 import { navigate } from "../router/router";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "../styles/form.scss"
+import loggedUser from "../api/loggedUser";
+import { getCurrentUser } from "../utils/auth";
 
-export const LoginUser = async (icon?: "text" | "user"): Promise<HTMLElement> => {
- 
+export const LoginUser = async (): Promise<HTMLElement> => {
+  
+  const userLog = await getCurrentUser();
 
   const wrapper = document.createElement("div");
   wrapper.className = "loginIcon__wrapper";
@@ -13,8 +16,9 @@ export const LoginUser = async (icon?: "text" | "user"): Promise<HTMLElement> =>
   loginLink.setAttribute("id", "loginIcon");
   loginLink.href = "/moje-konto";
 
-  if (icon === "text") {
-  } else if (icon === "user") {
+  if (userLog) {
+    loginLink.textContent = "Moje konto";
+  } else {
     const loginIcon = document.createElement("i");
     loginIcon.classList.add("fas", "fa-user");
     loginIcon.style.fontSize = "1em";
@@ -26,7 +30,6 @@ export const LoginUser = async (icon?: "text" | "user"): Promise<HTMLElement> =>
   loginLink.addEventListener("click", (event) => {
     event.preventDefault();
     const path = loginLink.getAttribute("href");
-    console.log(path)
     if (path) navigate(path);
   });
 

@@ -1,15 +1,26 @@
 import { LoginForm } from "./LoginForm";
 import "../../styles/form.scss";
+import UserAccount from "../sections/UserAccount";
 
 export class AuthFormWrapper {
     private container: HTMLElement;
     private wrapperForm: HTMLElement;
     private formTitle: HTMLElement;
     private formSubTitle: HTMLElement;
+    private userData: any | null; // Store parsed user data
 
     constructor(private type: string = "") {
         this.container = document.createElement("div");
         this.container.className = "container";
+
+        // Retrieve and parse currentUser from localStorage safely
+        const userLog = localStorage.getItem("currentUser");
+        try {
+            this.userData = userLog ? JSON.parse(userLog) : null;
+        } catch (error) {
+            console.error("Error parsing currentUser from localStorage", error);
+            this.userData = null;
+        }
 
         // Wrapper
         this.wrapperForm = document.createElement("div");
@@ -25,7 +36,7 @@ export class AuthFormWrapper {
         this.formSubTitle.textContent =
             type === "register"
                 ? "Rejestracja"
-                : "Utwórz konto lub zaloguj się aby wygodnie rezerwować sale";
+                : "Utwórz konto lub zaloguj się, aby wygodnie rezerwować sale";
     }
 
     private createBackHomeLink(): HTMLElement {
@@ -40,7 +51,7 @@ export class AuthFormWrapper {
         return backHomeLink;
     }
 
-    render(): HTMLElement {
+    async render(): Promise<HTMLElement> {
         const containerForms = document.createElement("div");
         containerForms.className = "container__forms";
         containerForms.appendChild(this.createBackHomeLink());
@@ -48,14 +59,19 @@ export class AuthFormWrapper {
         if (this.type === "register") {
             // RegisterForm should be added here when available
             // containerForms.appendChild(new RegisterForm().render());
-        } else {
+        } else if (this.userData) {
+            const user = await UserAccount();
+            this.container.appendChild(user);
+          }else {
             this.wrapperForm.appendChild(this.formTitle);
             this.wrapperForm.appendChild(this.formSubTitle);
             this.wrapperForm.appendChild(LoginForm.render()); 
             containerForms.appendChild(this.wrapperForm);
+            this.container.appendChild(containerForms);
         }
 
-        this.container.appendChild(containerForms);
         return this.container;
     }
 }
+
+

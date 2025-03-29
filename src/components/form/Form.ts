@@ -1,5 +1,6 @@
 import { Field } from "../../ui/Field";
 import "../../styles/form.scss";
+import loggedUser from "../../api/loggedUser";
 
 export class Form {
     protected fields: Field[];
@@ -30,7 +31,9 @@ export class Form {
         event.preventDefault();
         //event.stopPropagation();
 
-        this.validateFields()
+        if (this.validateFields()) {
+        
+        }
 
     }
 

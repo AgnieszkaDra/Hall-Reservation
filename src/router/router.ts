@@ -1,5 +1,6 @@
 import { AdminPage, NotFoundPage } from "../pages/pages";
 import { AuthFormWrapper } from "../components/form/AuthFormWrapper";
+import UserAccount from "../components/sections/UserAccount";
 
 type Route = {
   path: string;
@@ -10,6 +11,7 @@ type Route = {
 const routes: Route[] = [
   { path: "/admin", page: AdminPage },
   { path: "/moje-konto", component: async () => (new AuthFormWrapper('login')).render() },
+  { path: "/moje-konto/:path", component: () => UserAccount() }, 
 ];
 
 function matchRoute(path: string): { route: Route; param?: string } | undefined {

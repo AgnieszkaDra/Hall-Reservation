@@ -82,7 +82,7 @@
     display: flex;
     justify-content: flex-start;
     padding: 0 15px;
-    background-color: $color-chocoDarken;
+    background-color: $color-turcoiseDarken;
   }
     span {
       position: absolute;
@@ -143,7 +143,7 @@
   height: 100%;
   display: flex;
   flex-direction: row; 
-  background-color: $color-chocoDarken;
+  background-color: $color-turcoiseDarken;
   max-width: 540px;
   @media screen and (max-width: 575px) {
     flex-direction: column;
@@ -160,7 +160,7 @@
   font-family: Jost;
   text-transform: uppercase;
   letter-spacing: .1em;
-  background-color: $color-chocoLighten;
+  background-color: $color-turcoiseLighten;
   // &__list {
   //   width: 25%;
   // }
