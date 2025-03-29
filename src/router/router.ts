@@ -1,5 +1,5 @@
 import { AdminPage, NotFoundPage } from "../pages/pages";
-import { LoginWrapper } from "../components/form/LoginWrapper";
+import { AuthFormWrapper } from "../components/form/AuthFormWrapper";
 
 type Route = {
   path: string;
@@ -9,7 +9,7 @@ type Route = {
 
 const routes: Route[] = [
   { path: "/admin", page: AdminPage },
-  { path: "/moje-konto", component: async () => LoginWrapper() },
+  { path: "/moje-konto", component: async () => (new AuthFormWrapper('login')).render() },
 ];
 
 function matchRoute(path: string): { route: Route; param?: string } | undefined {
