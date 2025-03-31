@@ -35,7 +35,6 @@ export const Halls = async (): Promise<HTMLElement> => {
     link.addEventListener("click", (event: Event) => {
       event.preventDefault();
       openCalendar(hall);
-      //CalendarModal()
     });
 
     listItem.appendChild(listItemDescription);
