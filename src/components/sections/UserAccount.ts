@@ -2,6 +2,7 @@ import userList from '../../fields/userList';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import '../../styles/main.scss'
 import { getCurrentUser } from '../../utils/auth';
+import createTitle from '../../typography/createTitle';
 
 export const UserAccount = async (): Promise<HTMLElement> => {
   const container = document.createElement('div');
@@ -43,10 +44,8 @@ export const UserAccount = async (): Promise<HTMLElement> => {
   const currentPath = decodeURIComponent(window.location.pathname);
   const titleText = titles[currentPath] || 'Moje konto';
   
-  const title = document.createElement('h2');
-  title.className = 'title';
-  title.textContent = titleText;
-  
+  const title = createTitle('h2', titleText, 'title')
+ 
   const panelList = document.createElement('ul');
   panelList.className = 'account__list';
 

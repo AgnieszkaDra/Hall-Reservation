@@ -46,7 +46,7 @@ const emailRule = new EmailRule();
 const lengthRule = (amount: number) => new LengthRule(amount);
 
 const name = new InputField(
-    { type: "text", name: "name", label: "" },
+    { type: "text", name: "name", label: "Imię i Nazwisko" },
     [required, lengthRule(3)]
 );
 

@@ -90,7 +90,7 @@ export class InputField {
     constructor(
         public config: {
             required?: any; name: string; label: string; type: string 
-},
+    },
         private rules: Rule[] = []
     ) {}
 

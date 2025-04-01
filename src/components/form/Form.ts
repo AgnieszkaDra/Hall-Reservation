@@ -1,79 +1,90 @@
-import { Field } from "../../ui/InputField";
-import "../../styles/form.scss";
-import loggedUser from "../../api/loggedUser";
+import { InputField } from "../../ui/InputField";
+import { ButtonSend } from "../../ui/ButtonSend";
+import { RegisterForm } from "./RegisterForm";
+import { AuthFormWrapper } from "./AuthFormWrapper";
 
 export class Form {
-    protected fields: Field[];
+    protected name: string;
+    protected fields: InputField[] = [];
     protected formElement: HTMLFormElement;
+    protected button: ButtonSend;
 
-    constructor(fields: Field[] = []) {
+    constructor(name: string, fields: InputField[] = [], button: ButtonSend) {
+        this.name = name;
         this.fields = fields;
+        this.button = button;
         this.formElement = document.createElement("form");
         this.formElement.classList.add("form");
         this.formElement.setAttribute("novalidate", "");
         this.formElement.addEventListener("submit", (e) => this.handleSubmit(e));
     }
 
-    addField(field: Field): void {
+    addField(field: InputField): void {
         this.fields.push(field);
     }
 
-    private createSubmitButton(): HTMLButtonElement {
-        const submitButton = document.createElement("button");
-        submitButton.className ="form__button"
-        submitButton.type = "submit";
-        submitButton.textContent = "Dalej";
-        
-        return submitButton;
-    }
-
-    private handleSubmit(event: Event): void {
+    private async handleSubmit(event: Event): Promise<void> {
         event.preventDefault();
-        //event.stopPropagation();
+        const isValid = this.validateFields(); // 1
 
-        if (this.validateFields()) {
-        
+        if (await isValid === false) { // 2 
+            this.afterSend();
         }
-
     }
 
-    private validateFields(): boolean | HTMLInputElement[] {
+    private async validateFields(): Promise<boolean> {
         let isValid = true;
-    
         const invalidFields: HTMLInputElement[] = [];
-        
-        this.fields.forEach((field) => {
+
+        for (const field of this.fields) {
             const inputElement = this.formElement.querySelector(`[name="${field.config.name}"]`) as HTMLInputElement;
-            
-            if (!inputElement) return;
-    
+            if (!inputElement) continue;
+
             let errorElement = this.formElement.querySelector(`[data-error-for="${field.config.name}"]`) as HTMLElement;
-            
             if (!errorElement) {
                 errorElement = document.createElement("p");
                 errorElement.className = "error-message";
                 errorElement.setAttribute("data-error-for", field.config.name);
                 inputElement.insertAdjacentElement("afterend", errorElement);
             }
-    
+
             errorElement.textContent = "";
-    
+
             const isValidField = field.validate(inputElement.value);
-    
+
             if (!isValidField) {
                 isValid = false;
-    
-                errorElement.textContent = field.errors.join(", "); 
-                invalidFields.push(inputElement); 
+                errorElement.textContent = field.errors.join(", ");
+                invalidFields.push(inputElement);
             }
-        });
-    
-       
-        if (invalidFields.length > 0) {
-            return invalidFields; 
         }
-    
-        return isValid; 
+
+        return isValid;
+    }
+
+    private afterSend() {
+        if (this.name === 'login') {
+           alert('after login')
+            const containerLogin = document.querySelector('.container__login')
+            if (containerLogin) {
+                containerLogin.classList.toggle('block')
+            }
+
+           const registerForm = new AuthFormWrapper('register')
+           registerForm.render(); 
+           
+            const registerLogin = document.querySelector('.container__register')
+            if (registerLogin) {
+                registerLogin.classList.toggle('block')
+            }
+
+
+            const containerForms = document.querySelector('.container__forms')
+            if (containerForms) {
+                containerForms.innerHTML = ''; 
+                //containerForms.appendChild(register); 
+            }
+        }
     }
 
     generate(): HTMLElement {
@@ -102,7 +113,8 @@ export class Form {
             this.formElement.appendChild(wrapper);
         });
 
-        this.formElement.appendChild(this.createSubmitButton());
+        // Append the button
+        this.formElement.appendChild(this.button.createElement());
 
         return this.formElement;
     }

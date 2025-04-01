@@ -3,6 +3,7 @@ import { InputField } from "../../ui/InputField";
 import { RequiredRule } from "../../fields/rules/RequiredRule";
 import { EmailRule } from "../../fields/rules/EmailRule";
 import { EmailExistenceRule } from "../../fields/rules/EmailExistenceRule";
+import { ButtonSend } from "../../ui/ButtonSend";
 
 const required = new RequiredRule();
 const emailRule = new EmailRule();
@@ -13,4 +14,13 @@ const email = new InputField(
     [required, emailRule, emailExistenceRule]
 );
 
-export const LoginForm = new Form([email]);
+const buttonSend = new ButtonSend(
+    { type: "submit", name: "buttonSend", label: "Dalej" }
+);
+
+const containerLogin = document.querySelector('.container__login')
+            if (containerLogin) {
+                containerLogin.classList.toggle('block')
+            }
+
+export const LoginForm = new Form('login', [email], buttonSend);

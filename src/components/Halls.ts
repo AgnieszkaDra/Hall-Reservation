@@ -9,7 +9,10 @@ export const Halls = async (): Promise<HTMLElement> => {
   hallsContainer.classList.add("halls");
 
   const hallsList = await fetchHalls();
-  const openCalendar = CalendarModal(hallsList);
+  // const openCalendar = (hall: Hall) => {
+  //   console.log(hall)
+  //   CalendarModal(hall); 
+  // }
 
   hallsList.forEach((hall: Hall) => {
     const listItem = document.createElement("li");
@@ -34,7 +37,8 @@ export const Halls = async (): Promise<HTMLElement> => {
 
     link.addEventListener("click", (event: Event) => {
       event.preventDefault();
-      openCalendar(hall);
+      const openCalendar = CalendarModal(hall); 
+      openCalendar();
     });
 
     listItem.appendChild(listItemDescription);

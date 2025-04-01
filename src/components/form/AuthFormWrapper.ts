@@ -1,17 +1,19 @@
 import { LoginForm } from "./LoginForm";
 import "../../styles/form.scss";
 import UserAccount from "../sections/UserAccount";
+import { RegisterForm } from "./RegisterForm";
 
 export class AuthFormWrapper {
     private container: HTMLElement;
     private wrapperForm: HTMLElement;
     private formTitle: HTMLElement;
     private formSubTitle: HTMLElement;
-    private userData: any | null; // Store parsed user data
+    private userData: any | null; 
 
-    constructor(private type: string = "") {
+    constructor(private type: string = "", private className:string | null | undefined = '') {
         this.container = document.createElement("div");
         this.container.className = "container";
+        
 
         // Retrieve and parse currentUser from localStorage safely
         const userLog = localStorage.getItem("currentUser");
@@ -24,8 +26,12 @@ export class AuthFormWrapper {
 
         // Wrapper
         this.wrapperForm = document.createElement("div");
-        this.wrapperForm.className = "form__wrapper";
-
+        this.wrapperForm.className = type === "register" ? "container__register" : "container__login";
+        
+        // Override className if provided
+        if (this.className) {
+            this.wrapperForm.classList.add(this.className);
+        }
         // Title
         this.formTitle = document.createElement("h2");
         this.formTitle.className = "form__title";
@@ -55,23 +61,26 @@ export class AuthFormWrapper {
         const containerForms = document.createElement("div");
         containerForms.className = "container__forms";
         containerForms.appendChild(this.createBackHomeLink());
-
+        //const registerFormElement = RegisterForm.render(); 
+         ///   this.wrapperForm.appendChild(registerFormElement); 
         if (this.type === "register") {
-            // RegisterForm should be added here when available
-            // containerForms.appendChild(new RegisterForm().render());
+            alert('register')
+            const registerFormElement = RegisterForm.render(); // Render the form
+            this.wrapperForm.appendChild(registerFormElement); // Append the form to the wrapper
         } else if (this.userData) {
             const user = await UserAccount();
             this.container.appendChild(user);
-          }else {
+        } else {
             this.wrapperForm.appendChild(this.formTitle);
             this.wrapperForm.appendChild(this.formSubTitle);
-            this.wrapperForm.appendChild(LoginForm.render()); 
+            this.wrapperForm.appendChild(LoginForm.render());
             containerForms.appendChild(this.wrapperForm);
             this.container.appendChild(containerForms);
         }
 
+      
+        
+
         return this.container;
     }
 }
-
-
