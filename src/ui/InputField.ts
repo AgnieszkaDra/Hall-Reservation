@@ -84,7 +84,7 @@
 
 import { Rule } from "../fields/rules/Rule";
 
-export class Field {
+export class InputField {
     public errors: string[] = [];
 
     constructor(

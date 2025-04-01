@@ -1,0 +1,126 @@
+@use './abstracts/index' as *;
+
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+
+  &__link-home {
+    font-size: 14px;
+    text-decoration: underline;
+    color: $color-text;
+    align-self: flex-start;
+    display: block;
+    transform: translateY(-70px);
+  }
+
+  &__login, &__register {
+    display: none;
+    &.block {
+      display: block;
+    }
+  }
+
+    &__forms {
+        border: 2px solid $color-veryLightGrey;;
+        height: 70vh;
+        
+        @media(min-width: 576px) {
+          margin: 0 auto;
+          padding: 40px;
+          border-radius: 3px;
+          padding-right: 15px;
+          padding-left: 15px;
+        }
+    }
+}
+
+.form {
+  margin-bottom: 30px;
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+ 
+  &__title {
+    margin-bottom: 20px;
+    padding: 2vh 0;
+    text-align: center;
+    font-size: 2.1rem;
+    color: $color-text;
+  }
+
+  &__wrapper {
+    @include flexAbsoluteCenter;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  &__foot {
+    text-align: center;
+    &__link {
+      display: inline-block;
+      position: relative;
+      margin: 0 6px;
+    }
+  }
+
+  &__button {
+    display: block;
+    width: 100%;
+    width: 100%;
+    line-height: 1.6;
+    background-color: $color-text;
+    color: $color-veryLightGrey;
+    font-size: inherit;
+    padding: .75rem 0 .75rem 0;
+    margin-top: 20px;
+  }
+}
+
+.input {
+  display: block;
+  //max-width: 300px;
+  width: 100%;
+  font-size: 1em;
+  line-height: 1.6;
+  padding: .75rem;
+  border: 2px solid $color-veryLightGrey;;
+  color: $color-lightGrey;
+  
+  &__wrapper {
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 24px;
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  &__label {
+    opacity: 0;
+    padding: .575rem .75rem;
+    max-width: 390px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: text;
+  }
+
+}
+
+
+
+

@@ -1,0 +1,36 @@
+@use 'sass:color';
+
+$color-white: white;
+$color-smokeWhite: rgb(245, 245, 245);
+$color-veryLightGrey: rgb(226, 226, 226);
+$color-lightGrey: rgb(153, 153, 153);
+$color-darkgrey: rgb(40, 40, 40);
+$color-turcoise: rgb(34, 140, 172);;
+$color-turcoiseDarken: color.adjust($color-turcoise, $lightness: -2%);
+$color-turcoiseLighten: color.adjust($color-turcoise, $lightness: 5%);
+$color-green: rgb(0, 163, 75);
+$color-text: rgb(68, 68, 68);
+$color-textLight: rgb(153, 153, 153);
+$color-textLighten: color.adjust(rgb(68, 68, 68), $lightness: 2%);
+$color-red: rgb(123, 21, 27);
+$color-navy: rgb(42, 43, 71);
+$color-navyLighten: color.adjust(rgb(42,43,71), $lightness: 65%);
+
+:root {
+    --color-white: white; //
+    --color-smokeWhite: rgb(255, 255, 255); //
+    --color-veryLightGrey: rgb(230, 230, 230); /* #e6e6e6 */
+    --color-lightGrey: rgb(175, 175, 175); ///
+    --color-darkGrey: rgb(56, 55, 52); ///
+    --color-turcoise: rgb(34, 140, 172); //
+    --color-chocoDarken: #{color.adjust($color-turcoise, $lightness: -2%)}; //
+    --color-chocoLighten: #{color.adjust($color-turcoise, $lightness: 5%)}; ///
+    --color-green: rgb(0, 163, 75); //
+    --color-text: rgb(68, 68, 68);
+    --color-textLight: rgb(153, 153, 153);
+    --color-textLighten: #{color.adjust(rgb(68, 68, 68), $lightness: 2%)};
+    --color-red: rgb(123, 21, 27);
+    --color-navy: rgb(42, 43, 71);
+    --color-navyLighten: #{color.adjust(rgb(42, 43, 71), $lightness: 65%)};
+  }
+
