@@ -4,12 +4,12 @@
   height: 10vh;
   width: 100%;
   position: relative;
-  color: $color-navy;
+  color: $navy;
   display: flex;
   justify-content: space-between;
 
   &__products {
-    border-bottom: 1px solid $color-text;
+    border-bottom: 1px solid $text;
     display: flex;
     justify-content: space-between;
   }
@@ -56,7 +56,7 @@
       display: block;
       width: 100%;
       height: 3px;
-      background: $color-text;
+      background: $text;
       border-radius: 5px;
       transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
     }
@@ -77,18 +77,17 @@
   border-radius: 50%;
   padding: 5px;
   font-weight: 400;
-  background-color: $color-smokeWhite;
+  background-color: $smoke-white;
   &__wrapper {
     display: flex;
     justify-content: flex-start;
     padding: 0 15px;
-    background-color: $color-turcoiseDarken;
-  }
+    background-color: $turquoise-darken;
     span {
       position: absolute;
       width: 70%;
       height: 2px;
-      background: $color-text;
+      background: $text;
       border-radius: 5px;
       transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
       
@@ -102,6 +101,7 @@
       }
     }
 }
+}
 
 .account {
   &__wrapper {
@@ -109,7 +109,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: $color-navy;
+  color: $navy;
   margin-left: auto;
     & > * {
       margin: 0 20px;
@@ -123,13 +123,13 @@
 .basket {
   i {
     font-size: 1.8rem;
-    color: $color-navy;
+    color: $navy;
     margin-right: 8px;
   }
   &__link {
     display: flex;
     margin-left: auto;
-    color: $color-navy;
+    color: $navy;
     font-size: 1em;
   }
 }
@@ -143,7 +143,7 @@
   height: 100%;
   display: flex;
   flex-direction: row; 
-  background-color: $color-turcoiseDarken;
+  background-color: $turquoise-darken;
   max-width: 540px;
   @media screen and (max-width: 575px) {
     flex-direction: column;
@@ -160,11 +160,8 @@
   font-family: Jost;
   text-transform: uppercase;
   letter-spacing: .1em;
-  background-color: $color-turcoiseLighten;
-  // &__list {
-  //   width: 25%;
-  // }
-
+  background-color: $turquoise-lighten;
+ 
   &__item {
     text-transform: uppercase;
     letter-spacing: .1em;
@@ -175,14 +172,14 @@
 
   &__link {
     text-decoration: none;
-    color: $color-darkgrey;
+    color: $dark-gray;
     margin-bottom: 10px;
       &::after {
       content: '';
       display: block;
       width: 0;
       height: 2px;
-      background-color: $color-text; 
+      background-color: $text; 
       transition: width .25s;
       }
       &:hover::after {
@@ -194,8 +191,8 @@
     margin-right: auto;
     display: flex;
     justify-content: flex-start;
-    border-top: 1px solid $color-text;
-    border-bottom: 1px solid $color-text;
+    border-top: 1px solid $text;
+    border-bottom: 1px solid $text;
     padding-top: 10px;
     padding-bottom: 10px;
   }
@@ -208,14 +205,9 @@
   justify-content: center;
   align-items: flex-end;
   cursor: pointer;
-  color: $color-navy;
+  color: $navy;
   //font-size: 14px;
 }
 
 
 
-
-  
-  
-
-    

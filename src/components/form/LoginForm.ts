@@ -18,9 +18,4 @@ const buttonSend = new ButtonSend(
     { type: "submit", name: "buttonSend", label: "Dalej" }
 );
 
-const containerLogin = document.querySelector('.container__login')
-            if (containerLogin) {
-                containerLogin.classList.toggle('block')
-            }
-
 export const LoginForm = new Form('login', [email], buttonSend);

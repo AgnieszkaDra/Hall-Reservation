@@ -3,39 +3,34 @@ import { Hall } from "../types/Hall";
 import createTitle from "../typography/createTitle";
 import { CalendarModal } from "./calendar/CalendarModal";
 import "../styles/main.scss";
+import { createLink } from "../ui/createLink";
 
 export const Halls = async (): Promise<HTMLElement> => {
   const hallsContainer = document.createElement("ul");
-  hallsContainer.classList.add("halls");
+  hallsContainer.classList.add("hall-list");
 
   const hallsList = await fetchHalls();
-  // const openCalendar = (hall: Hall) => {
-  //   console.log(hall)
-  //   CalendarModal(hall); 
-  // }
-
   hallsList.forEach((hall: Hall) => {
     const listItem = document.createElement("li");
-    listItem.classList.add("halls__item");
+    listItem.classList.add("hall-list__item");
 
     const listItemDescription = document.createElement("div");
-    listItemDescription.classList.add("halls__description");
+    listItemDescription.classList.add("hall-list__description");
 
-    const titleWrapper = document.createElement("div");
     const titleContent = hall.name;
-    const title = createTitle("h2", titleContent, "halls__title");
+    const title = createTitle("h2", titleContent, "hall-list__title");
 
-    titleWrapper.appendChild(title);
+    const reservationLink = createLink(`${hall.id}`, "Zarezerwuj salę", "hall-list__link");
 
-    const link = document.createElement("a");
-    link.href = `/hall/${hall.id}`;
-    link.textContent = "Zarezerwuj salę";
-    link.classList.add("halls__link");
+    // const link = document.createElement("a");
+    // link.href = `/hall/${hall.id}`;
+    // link.textContent = "Zarezerwuj salę";
+    // link.classList.add("hall-list__link");
 
-    listItemDescription.appendChild(titleWrapper);
-    listItemDescription.appendChild(link);
+    listItemDescription.appendChild(title);
+    listItemDescription.appendChild(reservationLink);
 
-    link.addEventListener("click", (event: Event) => {
+    reservationLink.addEventListener("click", (event: Event) => {
       event.preventDefault();
       const openCalendar = CalendarModal(hall); 
       openCalendar();

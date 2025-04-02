@@ -25,11 +25,11 @@ export class Form {
 
     private async handleSubmit(event: Event): Promise<void> {
         event.preventDefault();
-        const isValid = this.validateFields(); // 1
+        this.validateFields(); // 1
 
-        if (await isValid === false) { // 2 
-            this.afterSend();
-        }
+        // if (await isValid === false) { // 2 
+        //     this.afterSend();
+        // }
     }
 
     private async validateFields(): Promise<boolean> {
@@ -72,7 +72,7 @@ export class Form {
 
            const registerForm = new AuthFormWrapper('register')
            registerForm.render(); 
-           
+
             const registerLogin = document.querySelector('.container__register')
             if (registerLogin) {
                 registerLogin.classList.toggle('block')
