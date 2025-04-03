@@ -10,7 +10,7 @@ type Route = {
 
 const routes: Route[] = [
   { path: "/admin", page: AdminPage },
-  { path: "/moje-konto", component: async () => (new AuthFormWrapper('login', 'block')).render() },
+  { path: "/moje-konto", component: async () => (new AuthFormWrapper('login')).render() },
   { path: "/moje-konto/:path", component: () => UserAccount() }, 
 ];
 

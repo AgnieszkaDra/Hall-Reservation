@@ -1,6 +1,5 @@
 import { InputField } from "../../ui/InputField";
 import { ButtonSend } from "../../ui/ButtonSend";
-import { RegisterForm } from "./RegisterForm";
 import { AuthFormWrapper } from "./AuthFormWrapper";
 
 export class Form {
@@ -113,7 +112,6 @@ export class Form {
             this.formElement.appendChild(wrapper);
         });
 
-        // Append the button
         this.formElement.appendChild(this.button.createElement());
 
         return this.formElement;

@@ -1,48 +1,13 @@
 import { LoginForm } from "./LoginForm";
 import "../../styles/form.scss";
-import UserAccount from "../sections/UserAccount";
 import { RegisterForm } from "./RegisterForm";
 
 export class AuthFormWrapper {
     private container: HTMLElement;
-    private wrapperForm: HTMLElement;
-    private formTitle: HTMLElement;
-    private formSubTitle: HTMLElement;
-    private userData: any | null; 
 
-    constructor(private type: string = "", private className:string | null | undefined = '') {
+    constructor(private type: string = "") {
         this.container = document.createElement("div");
         this.container.className = "container";
-        
-
-        // Retrieve and parse currentUser from localStorage safely
-        const userLog = localStorage.getItem("currentUser");
-        try {
-            this.userData = userLog ? JSON.parse(userLog) : null;
-        } catch (error) {
-            console.error("Error parsing currentUser from localStorage", error);
-            this.userData = null;
-        }
-
-        // Wrapper
-        this.wrapperForm = document.createElement("div");
-        this.wrapperForm.className = type === "register" ? "container__register" : "container__login";
-        
-        // Override className if provided
-        if (this.className) {
-            this.wrapperForm.classList.add(this.className);
-        }
-        // Title
-        this.formTitle = document.createElement("h2");
-        this.formTitle.className = "form__title";
-        this.formTitle.textContent = type === "register" ? "Rejestracja" : "Zarezerwuj salę";
-
-        this.formSubTitle = document.createElement("p");
-        this.formSubTitle.className = "form__paragraph";
-        this.formSubTitle.textContent =
-            type === "register"
-                ? "Rejestracja"
-                : "Utwórz konto lub zaloguj się, aby wygodnie rezerwować sale";
     }
 
     private createBackHomeLink(): HTMLElement {
@@ -57,29 +22,33 @@ export class AuthFormWrapper {
         return backHomeLink;
     }
 
+    private createFormContainer(type: string): HTMLElement {
+        const container = document.createElement("div");
+        container.className = type === "register" ? "container__register block" : "container__login block";
+
+        const formTitle = document.createElement("h2");
+        formTitle.className = "form__title";
+        formTitle.textContent = type === "register" ? "Rejestracja" : "Zarezerwuj salę";
+
+        const formSubTitle = document.createElement("p");
+        formSubTitle.className = "form__paragraph";
+        formSubTitle.textContent = "Utwórz konto lub zaloguj się, aby wygodnie rezerwować sale";
+
+        container.append(formTitle, formSubTitle);
+        return container;
+    }
+
     async render(): Promise<HTMLElement> {
         const containerForms = document.createElement("div");
         containerForms.className = "container__forms";
-        containerForms.appendChild(this.createBackHomeLink());
-        //const registerFormElement = RegisterForm.render(); 
-         ///   this.wrapperForm.appendChild(registerFormElement); 
-        if (this.type === "register") {
-            alert('register')
-            const registerFormElement = RegisterForm.render(); // Render the form
-            this.wrapperForm.appendChild(registerFormElement); // Append the form to the wrapper
-        } else if (this.userData) {
-            const user = await UserAccount();
-            this.container.appendChild(user);
-        } else {
-            this.wrapperForm.appendChild(this.formTitle);
-            this.wrapperForm.appendChild(this.formSubTitle);
-            this.wrapperForm.appendChild(LoginForm.render());
-            containerForms.appendChild(this.wrapperForm);
-            this.container.appendChild(containerForms);
-        }
 
-      
-        
+        containerForms.appendChild(this.createBackHomeLink());
+
+        const formContainer = this.createFormContainer(this.type);
+        const formElement = this.type === "register" ? RegisterForm.render() : LoginForm.render();
+
+        containerForms.append(formContainer, formElement);
+        this.container.appendChild(containerForms);
 
         return this.container;
     }

@@ -14,6 +14,7 @@ export class RequiredRule extends Rule {
     }
 
     getErrorMessage(): string {
+        alert('required')
         return "This field is required.";
     }
 }

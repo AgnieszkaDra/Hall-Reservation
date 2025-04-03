@@ -7,6 +7,7 @@ export class EmailRule extends Rule {
     }
 
     getErrorMessage(): string {
+        alert('wrong emair rule')
         return "Invalid email address.";
     }
 }
