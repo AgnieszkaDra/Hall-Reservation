@@ -7,7 +7,7 @@ import loggedUser from "../../api/loggedUser";
 import { RegisterSuccess } from "./RegisterSuccess";
 import { BACK_END_URL } from "../../constants/api";
 import { User } from "../../types/User";
-
+import registerUser from "../../api/registerUser";
 
 export class Form {
     protected name: string;
@@ -39,6 +39,20 @@ export class Form {
         }
 
         if (isValid && this.name === "register") {
+            this.fields.forEach((field) => {
+                const input = this.formElement.querySelector(`[name="${field.config.name}"]`) as HTMLInputElement;
+                if (input) {
+                    this.formData[field.config.name] = input.value;
+                }
+            });
+            const email = localStorage.getItem("actualEmail");
+            if (email) {
+                const parsedEmail = JSON.parse(email);
+                this.formData["email"] = parsedEmail;
+                const createdUser = registerUser(this.formData);
+                console.log(createdUser); ///problem
+            }
+            
             this.showRegisterSuccess();
         }
     }
@@ -73,46 +87,19 @@ export class Form {
     protected async afterValidate(): Promise<void> {
         const emailInput = this.formElement.querySelector('input[name="email"]') as HTMLInputElement;
         const emailValue = emailInput?.value.trim() || "";
-    
+
         try {
             const organizers = await fetchOrganizers();
             const existingOrganizer = organizers.find((organizer: Organizer) => organizer.email === emailValue);
-           
+            
             if (existingOrganizer) {
                 const updatedUser = await loggedUser(existingOrganizer);
                 localStorage.setItem("currentUser", JSON.stringify(updatedUser));
                 window.location.href = "/";
                 return;
-            } else {
-               this.fields.forEach((field) => {
-                    const input = this.formElement.querySelector(`[name="${field.config.name}"]`) as HTMLInputElement;
-                    if (input) {
-                        this.formData[field.config.name] = input.value;
-                    }
-                });
-    
-                const url = `${BACK_END_URL}/users`;
-                const body = this.formData;
-    
-                try {
-                    const resp = await fetch(url, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify(body),
-                    });
-    
-                    if (!resp.ok) throw new Error(`Error: ${resp.status}`);
-    
-                    const createdUser: User = await resp.json();
-                    console.log("New user created:", createdUser);
-                } catch (err) {
-                    console.error("Registration Error:", err);
-                }
-    
-                this.showRegisterForm();
             }
+            localStorage.setItem("actualEmail", JSON.stringify(emailValue));
+            this.showRegisterForm();
         } catch (error) {
             console.error("Error validating email existence:", error);
         }
