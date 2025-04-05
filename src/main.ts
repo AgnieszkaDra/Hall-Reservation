@@ -8,6 +8,7 @@ async function renderApp() {
   app.innerHTML = ""; 
 
   const homePage = await HomePage();
+  console.log(homePage, 'home page')
   if (homePage) {
     app.append(homePage);
   }

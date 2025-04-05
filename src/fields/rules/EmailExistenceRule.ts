@@ -9,7 +9,7 @@ export class EmailExistenceRule extends Rule {
         try {
             const organizers = await fetchOrganizers();
             const existingOrganizer = organizers.find((organizer: Organizer) => organizer.email === value);
-
+            console.log(existingOrganizer, 'to tu')
             if (existingOrganizer) {
                 const updatedUser = await loggedUser(existingOrganizer);
                 localStorage.setItem("currentUser", JSON.stringify(updatedUser));

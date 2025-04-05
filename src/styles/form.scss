@@ -6,7 +6,7 @@
   margin-right: auto;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
   align-items: center;
   justify-content: center;
 
@@ -119,6 +119,44 @@
     cursor: text;
   }
 
+}
+
+.container {
+  &__register-success {
+     padding: 3rem 1.5rem;
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: $turquoise;
+  border-radius: 12px;
+  border: 2px solid $very-light-gray;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+    
+  }
+}
+
+.register-success {
+height: 70vh;
+ 
+  &__title {
+    font-size: 1.75rem;
+    color: $text;
+    margin-bottom: 1rem;
+  }
+  &__paragraph {
+    font-size: 1rem;
+    color: $text-lighten;
+    margin-bottom: 2rem;
+  }
+  &__link {
+    font-size: 1rem;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    &:hover {
+      color: #059669; /* darker emerald on hover */
+    }
+  }
 }
 
 

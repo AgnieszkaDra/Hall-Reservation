@@ -1,6 +1,15 @@
 import { InputField } from "../../ui/InputField";
 import { ButtonSend } from "../../ui/ButtonSend";
 import { AuthFormWrapper } from "./AuthFormWrapper";
+import { fetchOrganizers } from "../../api/fetchOrganizers";
+import { Organizer } from "../../types/Organizer";
+import loggedUser from "../../api/loggedUser";
+import { navigate } from "../../router/router";
+import { BackHome } from "../../ui/BackHome";
+import { RegisterSuccess } from "./RegisterSuccess";
+import { BACK_END_URL } from "../../constants/api";
+import { User } from "../../types/User";
+import { sendUserData } from "../../api/sendUser";
 
 export class Form {
     protected name: string;
@@ -23,17 +32,20 @@ export class Form {
     }
 
     private async handleSubmit(event: Event): Promise<void> {
+        alert('submit')
+        console.log(this.name)
         event.preventDefault();
-        this.validateFields(); // 1
-
-        // if (await isValid === false) { // 2 
-        //     this.afterSend();
-        // }
+        const isValid = await this.validateFields();
+        if (isValid && this.name === "login") {
+            await this.afterValidate();
+        }
+        if (isValid && this.name === "register") {
+            this.showRegisterSuccess();
+        }
     }
 
     private async validateFields(): Promise<boolean> {
         let isValid = true;
-        const invalidFields: HTMLInputElement[] = [];
 
         for (const field of this.fields) {
             const inputElement = this.formElement.querySelector(`[name="${field.config.name}"]`) as HTMLInputElement;
@@ -50,39 +62,80 @@ export class Form {
             errorElement.textContent = "";
 
             const isValidField = field.validate(inputElement.value);
-
             if (!isValidField) {
                 isValid = false;
                 errorElement.textContent = field.errors.join(", ");
-                invalidFields.push(inputElement);
             }
         }
 
         return isValid;
     }
 
-    private afterSend() {
-        if (this.name === 'login') {
-           alert('after login')
-            const containerLogin = document.querySelector('.container__login')
-            if (containerLogin) {
-                containerLogin.classList.toggle('block')
+    protected async afterValidate(): Promise<void> {
+        const emailInput = this.formElement.querySelector('input[name="email"]') as HTMLInputElement;
+        const emailValue = emailInput?.value || "";
+
+        try {
+            const organizers = await fetchOrganizers();
+            const existingOrganizer = organizers.find((organizer: Organizer) => organizer.email === emailValue);
+
+            if (existingOrganizer) {
+                const updatedUser = await loggedUser(existingOrganizer);
+                localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+                window.location.href = "/";
+                return;
             }
 
-           const registerForm = new AuthFormWrapper('register')
-           registerForm.render(); 
+            this.showRegisterForm();
+           
+            const formData: Record<string, string | number> = {};
+            this.fields.forEach((field) => {
+                const input = this.formElement.querySelector(`[name="${field.config.name}"]`) as HTMLInputElement;
+                if (input) {
+                  formData[field.config.name] = input.value;
+                }
+              });
 
-            const registerLogin = document.querySelector('.container__register')
-            if (registerLogin) {
-                registerLogin.classList.toggle('block')
-            }
+              try {
+                await sendUserData(formData);
+              } catch (err) {
+                console.error("Registration Error:", err);
+              }
+    
 
+        } catch (error) {
+            console.error("Error validating email existence:", error);
+        }
+    }
 
-            const containerForms = document.querySelector('.container__forms')
-            if (containerForms) {
-                containerForms.innerHTML = ''; 
-                //containerForms.appendChild(register); 
-            }
+    protected async showRegisterForm(): Promise<void> {
+        
+        const containerLogin = document.querySelector('.container__login');
+        if (containerLogin) {
+            containerLogin.classList.toggle('block');
+        }
+
+        const wrapperContainer = document.querySelector('.container');
+        const authFormWrapper = new AuthFormWrapper('register');
+        if (wrapperContainer) {
+            wrapperContainer.innerHTML = '';
+            const registerFormElement = await authFormWrapper.render();
+            wrapperContainer.appendChild(registerFormElement);
+        }
+    }
+
+    protected async showRegisterSuccess(): Promise<void> {
+        
+        const containerLogin = document.querySelector('.container__login');
+        if (containerLogin) {
+            containerLogin.classList.toggle('block');
+        }
+
+        const wrapperContainer = document.querySelector('.container');
+        if (wrapperContainer) {
+            wrapperContainer.innerHTML = '';
+            const registerSuccessElement = RegisterSuccess.render(); 
+            wrapperContainer.appendChild(registerSuccessElement);
         }
     }
 
