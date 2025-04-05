@@ -22,18 +22,19 @@ export const Halls = async (): Promise<HTMLElement> => {
 
     const reservationLink = createLink(`${hall.id}`, "Zarezerwuj salę", "hall-list__link");
 
-    // const link = document.createElement("a");
-    // link.href = `/hall/${hall.id}`;
-    // link.textContent = "Zarezerwuj salę";
-    // link.classList.add("hall-list__link");
-
     listItemDescription.appendChild(title);
     listItemDescription.appendChild(reservationLink);
 
     reservationLink.addEventListener("click", (event: Event) => {
       event.preventDefault();
-      const openCalendar = CalendarModal(hall); 
-      openCalendar();
+      const user = localStorage.getItem("currentUser");
+      if(user) {
+        const openCalendar = CalendarModal(hall); 
+        openCalendar();
+      } else {
+        return
+      }
+      
     });
 
     listItem.appendChild(listItemDescription);
