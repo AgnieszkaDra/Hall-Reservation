@@ -1,13 +1,21 @@
 import { LoginForm } from "./LoginForm";
 import "../../styles/form.scss";
 import { RegisterForm } from "./RegisterForm";
+import { getCurrentUser } from "../../utils/auth";
+import UserAccount from "../sections/UserAccount";
 
 export class AuthFormWrapper {
     private container: HTMLElement;
+    private userLog: string | null;
 
     constructor(private type: string = "") {
         this.container = document.createElement("div");
         this.container.className = "container";
+        this.userLog = null;
+    }
+
+    async initialize(): Promise<void> {
+        this.userLog = await getCurrentUser();
     }
 
     private createBackHomeLink(): HTMLElement {
@@ -44,8 +52,21 @@ export class AuthFormWrapper {
 
         containerForms.appendChild(this.createBackHomeLink());
 
+        // Check if user is already logged in
+        if (this.userLog) {
+            const user = await UserAccount();
+            this.container.appendChild(user);
+            return this.container;
+        }
+
         const formContainer = this.createFormContainer(this.type);
-        const formElement = this.type === "register" ? RegisterForm.render() : LoginForm.render();
+        let formElement: HTMLElement;
+
+        if (this.type === "register") {
+            formElement = RegisterForm.render();
+        } else {
+            formElement = LoginForm.render();
+        }
 
         containerForms.append(formContainer, formElement);
         this.container.appendChild(containerForms);
