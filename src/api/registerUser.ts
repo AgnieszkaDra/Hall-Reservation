@@ -18,7 +18,7 @@ export async function registerUser(body: any): Promise<User> {
         if (!resp.ok) throw new Error(`Error: ${resp.status}`);
 
         const createdUser: User = await resp.json();
-        console.log("New user created:", createdUser);
+        
         return createdUser;
 
     } catch (err) {

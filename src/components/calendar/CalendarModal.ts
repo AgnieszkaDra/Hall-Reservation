@@ -4,7 +4,7 @@ import { Hall } from "../../types/Hall";
 import "../../styles/calendar.scss";
 import CloseButton from "../../ui/CloseButton";
 import CalendarNavigation from "../../ui/CalendarNavigation";
-import { fetchHalls } from "../../api/fetchHalls";
+import { fetchData } from "../../api/fetchData";
 
 const isHallOpenOnDay = (hall: Hall, date: Date): boolean => {
   const dayOfWeek = daysOfWeek[date.getDay()].api.toLowerCase();
@@ -44,7 +44,7 @@ export const CalendarModal = (hall: Hall) => {
   let currentYear = currentDate.getFullYear();
 
   const renderCalendar = async () => {
-    const halls = await fetchHalls();
+    const halls = await fetchData('halls');
     if (halls.length === 0) {
       console.error("No halls available");
       return;

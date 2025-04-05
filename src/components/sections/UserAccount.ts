@@ -1,15 +1,15 @@
 import userList from '../../fields/userList';
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import '../../styles/main.scss'
+import '../../styles/main.scss';
 import { getCurrentUser } from '../../utils/auth';
 import createTitle from '../../typography/createTitle';
+import { LoginLink } from '../../ui/LoginLink';
 
 export const UserAccount = async (): Promise<HTMLElement> => {
   const container = document.createElement('div');
   container.className = 'container';
 
   const userLog = await getCurrentUser();
-  console.log(userLog)
 
   const wrapper = document.createElement('div');
   wrapper.className = 'account';
@@ -30,9 +30,8 @@ export const UserAccount = async (): Promise<HTMLElement> => {
 
   const userInfo = document.createElement('div');
   userInfo.className = 'account__user-info';
-
   userInfo.textContent = userLog ? `Witaj, ${userLog.name}` : "Witaj, Gościu";
-  
+
   user.append(loginIconWrapper, userInfo);
   panel.appendChild(user);
 
@@ -41,12 +40,11 @@ export const UserAccount = async (): Promise<HTMLElement> => {
     '/moje konto/details': 'Szczegóły konta',
     '/': 'Strona główna',
   };
-  
+
   const currentPath = decodeURIComponent(window.location.pathname);
   const titleText = titles[currentPath] || 'Moje konto';
-  
-  const title = createTitle('h2', titleText, 'title')
- 
+  const title = createTitle('h2', titleText, 'title');
+
   const panelList = document.createElement('ul');
   panelList.className = 'account__list';
 
@@ -54,21 +52,18 @@ export const UserAccount = async (): Promise<HTMLElement> => {
     const listItem = document.createElement('li');
     listItem.className = 'account__item';
 
-    const link = document.createElement('a');
-    link.className = 'account__link';
-    link.href = item.href;
-    link.textContent = item.name;
+    const link = LoginLink({
+      text: item.name,
+      href: item.href,
+      className: 'account__link',
+      headingLevel: 'span', 
+    });
 
     link.addEventListener("click", (event: MouseEvent) => {
-      
       if (item.name !== "Strona główna") {
-        if (item.name === 'Wyloguj'){
+        if (item.name === 'Wyloguj') {
           localStorage.removeItem("currentUser");
         }
-        // if (event.target && event.target instanceof HTMLAnchorElement) {
-        //   console.log(event.target.href);
-        // //navigate(event.target.href);
-        // } 
       }
     });
 

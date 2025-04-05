@@ -1,22 +1,21 @@
 import { InputField } from "../../ui/InputField";
 import { ButtonSend } from "../../ui/ButtonSend";
 import { AuthFormWrapper } from "./AuthFormWrapper";
-import { fetchOrganizers } from "../../api/fetchOrganizers";
+import { fetchData } from "../../api/fetchData";
 import { Organizer } from "../../types/Organizer";
 import loggedUser from "../../api/loggedUser";
 import { RegisterSuccess } from "./RegisterSuccess";
-import { BACK_END_URL } from "../../constants/api";
-import { User } from "../../types/User";
 import registerUser from "../../api/registerUser";
+import { SelectField } from "../SelectField";
 
 export class Form {
     protected name: string;
-    protected fields: InputField[] = [];
+    protected fields: (InputField | SelectField)[] = [];
     protected formElement: HTMLFormElement;
     protected button: ButtonSend;
     protected formData: Record<string, string | number> = {};
 
-    constructor(name: string, fields: InputField[] = [], button: ButtonSend) {
+    constructor(name: string, fields: (InputField | SelectField)[] = [], button: ButtonSend) {
         this.name = name;
         this.fields = fields;
         this.button = button;
@@ -26,7 +25,7 @@ export class Form {
         this.formElement.addEventListener("submit", (e) => this.handleSubmit(e));
     }
 
-    addField(field: InputField): void {
+    addField(field: InputField | SelectField): void {
         this.fields.push(field);
     }
 
@@ -34,25 +33,26 @@ export class Form {
         event.preventDefault();
         const isValid = await this.validateFields();
 
-        if (isValid && this.name === "login") {
-            await this.afterValidate();
-        }
-
-        if (isValid && this.name === "register") {
+        if (isValid) {
             this.fields.forEach((field) => {
                 const input = this.formElement.querySelector(`[name="${field.config.name}"]`) as HTMLInputElement;
                 if (input) {
                     this.formData[field.config.name] = input.value;
                 }
             });
+        }
+
+        if (isValid && this.name === "login") {
+            await this.afterValidate();
+        }
+
+        if (isValid && this.name === "register") {
             const email = localStorage.getItem("actualEmail");
             if (email) {
-                const parsedEmail = JSON.parse(email);
-                this.formData["email"] = parsedEmail;
-                const createdUser = registerUser(this.formData);
-                console.log(createdUser); ///problem
+                this.formData["email"] = JSON.parse(email);
+                const createdUser = await registerUser(this.formData);
+                console.log(createdUser);
             }
-            
             this.showRegisterSuccess();
         }
     }
@@ -61,7 +61,7 @@ export class Form {
         let isValid = true;
 
         for (const field of this.fields) {
-            const inputElement = this.formElement.querySelector(`[name="${field.config.name}"]`) as HTMLInputElement;
+            const inputElement = this.formElement.querySelector(`[name="${field.config.name}"]`) as HTMLInputElement | HTMLSelectElement;
             if (!inputElement) continue;
 
             let errorElement = this.formElement.querySelector(`[data-error-for="${field.config.name}"]`) as HTMLElement;
@@ -73,11 +73,17 @@ export class Form {
             }
 
             errorElement.textContent = "";
+            let isValidField = true;
 
-            const isValidField = field.validate(inputElement.value);
+            if ('validate' in field && typeof field.validate === 'function') {
+                isValidField = field.validate(inputElement.value);
+            }
+
             if (!isValidField) {
                 isValid = false;
-                errorElement.textContent = field.errors.join(", ");
+                if ('errors' in field && Array.isArray(field.errors)) {
+                    errorElement.textContent = field.errors.join(", ");
+                }
             }
         }
 
@@ -89,15 +95,16 @@ export class Form {
         const emailValue = emailInput?.value.trim() || "";
 
         try {
-            const organizers = await fetchOrganizers();
+            const organizers = await fetchData('organizers');
             const existingOrganizer = organizers.find((organizer: Organizer) => organizer.email === emailValue);
-            
+
             if (existingOrganizer) {
                 const updatedUser = await loggedUser(existingOrganizer);
                 localStorage.setItem("currentUser", JSON.stringify(updatedUser));
                 window.location.href = "/";
                 return;
             }
+
             localStorage.setItem("actualEmail", JSON.stringify(emailValue));
             this.showRegisterForm();
         } catch (error) {
@@ -112,9 +119,9 @@ export class Form {
         }
 
         const wrapperContainer = document.querySelector(".container");
-        const authFormWrapper = new AuthFormWrapper("register");
         if (wrapperContainer) {
             wrapperContainer.innerHTML = "";
+            const authFormWrapper = new AuthFormWrapper("register");
             const registerFormElement = await authFormWrapper.render();
             wrapperContainer.appendChild(registerFormElement);
         }
@@ -137,31 +144,47 @@ export class Form {
     generate(): HTMLElement {
         this.formElement.innerHTML = "";
 
-        this.fields.forEach((field) => {
+        // this.fields.forEach((field) => {
+        //     const wrapper = document.createElement("div");
+        //     wrapper.className = "input__wrapper";
+
+        //     const input = document.createElement("input");
+        //     if ('type' in field.config) {
+        //         input.type = field.config.type;
+        //     }
+        //     input.name = field.config.name;
+        //     input.className = "input";
+        //     input.placeholder = field.config.label;
+
+        //     if ('required' in field.config && field.config.required) {
+        //         input.required = true;
+        //     }
+
+        //     const errorMessage = document.createElement("p");
+        //     errorMessage.className = "error-message";
+        //     errorMessage.setAttribute("data-error-for", field.config.name);
+
+        //     wrapper.appendChild(input);
+        //     wrapper.appendChild(errorMessage);
+        //     this.formElement.appendChild(wrapper);
+        // });
+        this.fields.forEach(field => {
             const wrapper = document.createElement("div");
-            wrapper.className = "input__wrapper";
+            wrapper.className = "field";
 
-            const input = document.createElement("input");
-            input.type = field.config.type;
-            input.name = field.config.name;
-            input.className = "input";
-            input.placeholder = field.config.label;
+            let fieldElement: HTMLElement;
 
-            if (field.config.required) {
-                input.required = true;
-            }
+            fieldElement = field.createElement();
 
             const errorMessage = document.createElement("p");
             errorMessage.className = "error-message";
             errorMessage.setAttribute("data-error-for", field.config.name);
 
-            wrapper.appendChild(input);
+            wrapper.appendChild(fieldElement);
             wrapper.appendChild(errorMessage);
             this.formElement.appendChild(wrapper);
         });
-
         this.formElement.appendChild(this.button.createElement());
-
         return this.formElement;
     }
 

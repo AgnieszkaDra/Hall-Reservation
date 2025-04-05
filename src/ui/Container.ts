@@ -11,7 +11,7 @@ export class Container {
 
     private createContainer(): HTMLDivElement {
         const container = document.createElement("div");
-        container.className = `container container__${this.name}`;
+        container.className = `container__${this.name}`;
         container.classList.add(`${this.name}`)
         this.children.forEach(child => container.appendChild(child));
     

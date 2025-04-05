@@ -30,6 +30,7 @@ export class AuthFormWrapper {
         return backHomeLink;
     }
 
+  
     private createFormContainer(type: string): HTMLElement {
         const container = document.createElement("div");
         container.className = type === "register" ? "container__register block" : "container__login block";
@@ -45,14 +46,13 @@ export class AuthFormWrapper {
         container.append(formTitle, formSubTitle);
         return container;
     }
-
+    
     async render(): Promise<HTMLElement> {
         const containerForms = document.createElement("div");
         containerForms.className = "container__forms";
 
         containerForms.appendChild(this.createBackHomeLink());
 
-        // Check if user is already logged in
         if (this.userLog) {
             const user = await UserAccount();
             this.container.appendChild(user);
@@ -63,7 +63,7 @@ export class AuthFormWrapper {
         let formElement: HTMLElement;
 
         if (this.type === "register") {
-            formElement = RegisterForm.render();
+            formElement = (await RegisterForm).render();
         } else {
             formElement = LoginForm.render();
         }

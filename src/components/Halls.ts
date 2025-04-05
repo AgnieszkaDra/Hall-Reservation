@@ -1,4 +1,4 @@
-import { fetchHalls } from "../api/fetchHalls";
+import { fetchData } from "../api/fetchData";
 import { Hall } from "../types/Hall";
 import createTitle from "../typography/createTitle";
 import { CalendarModal } from "./calendar/CalendarModal";
@@ -9,7 +9,7 @@ export const Halls = async (): Promise<HTMLElement> => {
   const hallsContainer = document.createElement("ul");
   hallsContainer.classList.add("hall-list");
 
-  const hallsList = await fetchHalls();
+  const hallsList = await fetchData('halls');
   hallsList.forEach((hall: Hall) => {
     const listItem = document.createElement("li");
     listItem.classList.add("hall-list__item");
