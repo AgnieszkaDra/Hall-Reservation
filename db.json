@@ -1,28 +1,140 @@
 {
-    "halls": [
+  "actualUser": {
+    "email": "agnieszka.127@interia.pl",
+    "id": "",
+    "lastLogin": "2025-04-05T15:37:27.319Z"
+  },
+  "loggedUser": {
+    "name": "Jan Kowalski",
+    "email": "kowal@interia.pl",
+    "password": "1234",
+    "communions": [
+      {
+        "group": [
+          "Droga Neokatechumenalna"
+        ]
+      },
+      {
+        "group": [
+          "Droga Neokatechumenalna"
+        ]
+      },
+      {
+        "group": [
+          "Domowy Kościół"
+        ]
+      }
+    ],
+    "id": "e9bf",
+    "lastLogin": "2025-04-05T15:28:40.328Z"
+  },
+  "users": [
+    {
+      "id": "fb6e"
+    },
+    {
+      "id": "9bef"
+    },
+    {
+      "id": "eee9",
+      "email": "agnieszka.127@interia.pl"
+    }
+  ],
+  "halls": [
+    {
+      "name": "Sala Sw. Augustyna",
+      "openinghours": {
+        "start": "10:00",
+        "end": "22:00"
+      },
+      "openingdays": [
+        "monday",
+        "tuesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
+      "id": "a2be"
+    },
+    {
+      "name": "Sala Aniołów",
+      "openinghours": {
+        "start": "09:00",
+        "end": "14:00"
+      },
+      "openingdays": [
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
+      "id": "fa7f"
+    },
+    {
+      "name": "Sala Św. Michała",
+      "openinghours": {
+        "start": "10:00",
+        "end": "22:00"
+      },
+      "openingdays": [
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday"
+      ],
+      "id": "9c4b"
+    }
+  ],
+  "organizers": [
+    {
+      "name": "Jan Kowalski",
+      "email": "kowal@interia.pl",
+      "password": "1234",
+      "communions": [
         {
-        "name": "Sala Sw. Augustyna",
-        "openinghours":  {
-            "start": "10:00",
-            "end": "22:00"
-        },
-        "openingdays": ["monday", "tuesday",  "thursday", "friday", "saturday"]
+          "group": [
+            "Droga Neokatechumenalna"
+          ]
         },
         {
-        "name": "Sala Aniołów",
-        "openinghours":  {
-            "start": "09:00",
-            "end": "14:00"
-        },
-        "openingdays": ["wednesday", "thursday", "friday", "saturday"]
+          "group": [
+            "Droga Neokatechumenalna"
+          ]
         },
         {
-        "name": "Sala Św. Michała",
-        "openinghours":  {
-            "start": "10:00",
-            "end": "22:00"
-        },
-        "openingdays": ["wednesday", "thursday", "friday", "saturday"]
+          "group": [
+            "Domowy Kościół"
+          ]
         }
-    ]
+      ],
+      "id": "e9bf"
+    },
+    {
+      "name": "Ola Kowalska",
+      "email": "kowalola@interia.pl",
+      "password": "1235",
+      "communions": [
+        {
+          "group": [
+            "Domowy Kościół",
+            "Oaza"
+          ]
+        }
+      ],
+      "id": "4288"
+    },
+    {
+      "name": "Jola Górna",
+      "email": "jolagora@interia.pl",
+      "password": "1236",
+      "communions": [
+        {
+          "group": [
+            "Jasnogórska Rodzina Różańcowa"
+          ]
+        }
+      ],
+      "id": "a579"
+    }
+  ]
 }

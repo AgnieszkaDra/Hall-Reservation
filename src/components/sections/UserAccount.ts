@@ -9,6 +9,7 @@ export const UserAccount = async (): Promise<HTMLElement> => {
   container.className = 'container';
 
   const userLog = await getCurrentUser();
+  console.log(userLog)
 
   const wrapper = document.createElement('div');
   wrapper.className = 'account';

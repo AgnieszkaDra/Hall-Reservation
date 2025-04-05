@@ -7,7 +7,6 @@ export const LoginUser = async (): Promise<HTMLElement> => {
   
   const userLog = await getCurrentUser();
  
-
   const wrapper = document.createElement("div");
   wrapper.className = "loginIcon__wrapper";
 
