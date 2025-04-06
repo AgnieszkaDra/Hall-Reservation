@@ -1,8 +1,9 @@
-import { LoginForm } from "./LoginForm";
+import { EmailForm } from "./EmailForm";
 import "../../styles/form.scss";
 import { RegisterForm } from "./RegisterForm";
 import { getCurrentUser } from "../../utils/auth";
 import UserAccount from "../sections/UserAccount";
+import { LoginForm } from "./LoginForm";
 
 export class AuthFormWrapper {
     private container: HTMLElement;
@@ -37,12 +38,23 @@ export class AuthFormWrapper {
 
         const formTitle = document.createElement("h2");
         formTitle.className = "form__title";
-        formTitle.textContent = type === "register" ? "Rejestracja" : "Zarezerwuj salę";
-
+        const titles: Record<string, string> = {
+            register: "Rejestracja",
+            login: "Logowanie",
+            email: "Zarezerwuj salę",
+        };
+        
+        formTitle.textContent = titles[type] ?? "Zarezerwuj salę";
+       
         const formSubTitle = document.createElement("p");
         formSubTitle.className = "form__paragraph";
-        formSubTitle.textContent = "Utwórz konto lub zaloguj się, aby wygodnie rezerwować sale";
-
+        const subTitles: Record<string, string> = {
+            register: "Zarejestruj się",
+            login: "Podaj hasło, aby się zalogować",
+            email: "Utwórz konto lub zaloguj się, aby wygodnie rezerwować sale",
+        };
+        formSubTitle.textContent = subTitles[type] ?? subTitles.email;
+       
         container.append(formTitle, formSubTitle);
         return container;
     }
@@ -60,15 +72,21 @@ export class AuthFormWrapper {
         }
 
         const formContainer = this.createFormContainer(this.type);
-        let formElement: HTMLElement;
+        let formElement: HTMLElement | null = null;
 
         if (this.type === "register") {
             formElement = (await RegisterForm).render();
-        } else {
+        } else if(this.type === "email") {
+            formElement = EmailForm.render();
+        } else if(this.type === "login") {
             formElement = LoginForm.render();
         }
 
-        containerForms.append(formContainer, formElement);
+        if (formElement) {
+            containerForms.append(formContainer, formElement);
+        } else {
+            console.error("Form element could not be created. Invalid form type:", this.type);
+        }
         this.container.appendChild(containerForms);
 
         return this.container;

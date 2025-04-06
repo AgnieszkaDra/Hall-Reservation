@@ -26,14 +26,12 @@ const button = new ButtonSend({
 });
 
 export const RegisterForm = fetchCommunions().then((communionOptions) => {
-    const communionField = new SelectField(
-        {
-            name: "communion",
-            label: "Wybierz wspólnotę",
-            options: communionOptions,
-        },
-        [required]
-    );
+    const communionField = new SelectField({
+        name: "communion",
+        label: "Wybierz wspólnotę",
+        type: "select", 
+        options: communionOptions,
+    });
 
     return new Form("register", [nameField, cityField, communionField], button);
 });

@@ -1,4 +1,3 @@
-import { InputField } from "../../ui/InputField";
 import { ButtonSend } from "../../ui/ButtonSend";
 import { AuthFormWrapper } from "./AuthFormWrapper";
 import { fetchData } from "../../api/fetchData";
@@ -6,16 +5,16 @@ import { Organizer } from "../../types/Organizer";
 import loggedUser from "../../api/loggedUser";
 import { RegisterSuccess } from "./RegisterSuccess";
 import registerUser from "../../api/registerUser";
-import { SelectField } from "../SelectField";
+import { Field } from "../../types/fields";
 
 export class Form {
     protected name: string;
-    protected fields: (InputField | SelectField)[] = [];
+    protected fields: (Field)[] = [];
     protected formElement: HTMLFormElement;
     protected button: ButtonSend;
     protected formData: Record<string, string | number> = {};
 
-    constructor(name: string, fields: (InputField | SelectField)[] = [], button: ButtonSend) {
+    constructor(name: string, fields: (Field)[] = [], button: ButtonSend) {
         this.name = name;
         this.fields = fields;
         this.button = button;
@@ -24,8 +23,9 @@ export class Form {
         this.formElement.setAttribute("novalidate", "");
         this.formElement.addEventListener("submit", (e) => this.handleSubmit(e));
     }
+    
 
-    addField(field: InputField | SelectField): void {
+    addField(field: Field): void {
         this.fields.push(field);
     }
 
@@ -101,14 +101,37 @@ export class Form {
             if (existingOrganizer) {
                 const updatedUser = await loggedUser(existingOrganizer);
                 localStorage.setItem("currentUser", JSON.stringify(updatedUser));
-                window.location.href = "/";
+                this.showLoginForm();
+                //window.location.href = "/";
                 return;
+            }
+            const users = await fetchData('users');
+            const registerUser = users.find((organizer: Organizer) => organizer.email === emailValue);
+            if (registerUser) {
+                this.showLoginForm();
+            } else {
+               this.showRegisterForm(); 
             }
 
             localStorage.setItem("actualEmail", JSON.stringify(emailValue));
-            this.showRegisterForm();
+            
         } catch (error) {
             console.error("Error validating email existence:", error);
+        }
+    }
+
+    protected async showLoginForm(): Promise<void> {
+        const containerLogin = document.querySelector(".container__login");
+        if (containerLogin) {
+            containerLogin.classList.toggle("block");
+        }
+
+        const wrapperContainer = document.querySelector(".container");
+        if (wrapperContainer) {
+            wrapperContainer.innerHTML = "";
+            const authFormWrapper = new AuthFormWrapper("login");
+            const registerFormElement = await authFormWrapper.render();
+            wrapperContainer.appendChild(registerFormElement);
         }
     }
 
