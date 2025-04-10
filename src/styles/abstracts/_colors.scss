@@ -1,0 +1,52 @@
+@use "sass:color";
+
+// Neutral Colors
+$white: #ffffff;
+$smoke-white: #f5f5f5;
+$very-light-gray: #e6e6e6;
+$light-gray: #afafaf;
+$dark-gray: #383734;
+
+// Turquoise Variants
+$turquoise: #228cac;
+$turquoise-darken: color.adjust($turquoise, $lightness: -2%);
+$turquoise-lighten: color.adjust($turquoise, $lightness: 5%);
+
+// Navy Variants
+$navy: #2a2b47;
+$navy-lighten: color.adjust($navy, $lightness: 65%);
+
+// Other Colors
+$green: #00a34b;
+$red: #7b151b;
+
+// Text Colors
+$text: #444444;
+$text-lighten: color.adjust($text, $lightness: 2%);
+
+:root {
+  // Neutral Colors
+  --color-white: #ffffff;
+  --color-smoke-white: #f5f5f5;
+  --color-very-light-gray: #e6e6e6;
+  --color-light-gray: #afafaf;
+  --color-dark-gray: #383734;
+
+  // Turquoise Variants
+  --color-turquoise: #228cac;
+  --color-turquoise-darken: #{$turquoise-darken};
+  --color-turquoise-lighten: #{$turquoise-lighten};
+
+  // Navy Variants
+  --color-navy: #2a2b47;
+  --color-navy-lighten: #{$navy-lighten};
+
+  // Other Colors
+  --color-green: #00a34b;
+  --color-red: #7b151b;
+
+  // Text Colors
+  --color-text: #444444;
+  --color-text-light: #999999;
+  --color-text-lighten: #{$text-lighten};
+}
