@@ -1,52 +1,16 @@
-import "../../styles/form.scss";
-import { EmailForm } from "./EmailForm";
-import { RegisterForm } from "./RegisterForm";
-import { LoginForm } from "./LoginForm";
-import { getCurrentUser } from "../../utils/auth";
-import UserAccount from "../sections/UserAccount";
-
-
-class FormTitle {
-    constructor(private type: string) {}
-
-    create(): HTMLElement {
-        const title = document.createElement("h2");
-        title.className = "form__title";
-        const titles: Record<string, string> = {
-            register: "Rejestracja",
-            login: "Logowanie",
-            email: "Zarezerwuj salę",
-        };
-        title.textContent = titles[this.type] ?? titles.email;
-        return title;
-    }
-}
-
-class FormSubTitle {
-    constructor(private type: string) {}
-
-    create(): HTMLElement {
-        const subtitle = document.createElement("p");
-        subtitle.className = "form__paragraph";
-        const subtitles: Record<string, string> = {
-            register: "Zarejestruj się",
-            login: "Podaj hasło, aby się zalogować",
-            email: "Utwórz konto lub zaloguj się, aby wygodnie rezerwować sale",
-        };
-        subtitle.textContent = subtitles[this.type] ?? subtitles.email;
-        return subtitle;
-    }
-}
+import { Register } from "./Register";
+import { Login } from "./Login";
+import { button, email, password } from "../../ui/fields/fieldTypes";
 
 class FormFactory {
     static async create(type: string): Promise<HTMLElement | null> {
         switch (type) {
             case "register":
-                return (await RegisterForm).render();
-            case "email":
-                return EmailForm.render();
+                const registerForm = new Register([email, password]);  
+                return registerForm.render();
             case "login":
-                return LoginForm.render();
+                const loginSection = new Login([email, password, button]);
+                return loginSection.render(); 
             default:
                 return null;
         }
@@ -55,20 +19,15 @@ class FormFactory {
 
 export class AuthFormWrapper {
     private container: HTMLElement;
-    private userLog: string | null = null;
 
     constructor(private type: string = "") {
-        this.container = document.createElement("div");
-        this.container.className = "container";
-    }
-
-    async initialize(): Promise<void> {
-        this.userLog = await getCurrentUser();
+        this.container = document.createElement("section");
+        this.container.className = "account__auth-form";
     }
 
     private createBackHomeLink(): HTMLElement {
         const link = document.createElement("a");
-        link.className = "container__link-home";
+        link.className = "account__link-home";
         link.href = "/index.html";
 
         const text = document.createElement("h3");
@@ -80,39 +39,33 @@ export class AuthFormWrapper {
 
     private createFormContainer(): HTMLElement {
         const container = document.createElement("div");
-        container.className = this.type === "register" ? "container__register block" : "container__login block";
-        container.className = this.type === "email" ? "container__register block" : "container__login block";
-
-        const title = new FormTitle(this.type).create();
-        const subtitle = new FormSubTitle(this.type).create();
-        container.append(title, subtitle);
-
+    
+        if (this.type === "login") {
+            container.className = "forms__login block";
+        } else if (this.type === "register") {
+            container.className = "forms__register block";
+        }
+    
+        console.log(container);
         return container;
     }
 
     async render(): Promise<HTMLElement> {
         const containerForms = document.createElement("div");
-        containerForms.className = "container__forms";
+        containerForms.className = "account__forms";
         containerForms.appendChild(this.createBackHomeLink());
-
-        if (this.userLog) {
-            const user = await UserAccount();
-            this.container.appendChild(user);
-            return this.container;
-        }
-
+    
         const formContainer = this.createFormContainer();
-        console.log(formContainer)
         const formElement = await FormFactory.create(this.type);
-        console.log(formElement) /// form element is not visible
-
+    
         if (formElement) {
-            containerForms.append(formContainer, formElement);
+            formContainer.appendChild(formElement); 
+            containerForms.append(formContainer);
+            this.container.appendChild(containerForms);
         } else {
             console.error("Form element could not be created. Invalid form type:", this.type);
         }
-       
-        this.container.appendChild(containerForms);
+    
         return this.container;
     }
 }

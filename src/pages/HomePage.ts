@@ -1,28 +1,14 @@
 import { Halls } from "../components/Halls";
-import Header from "../components/header/helpers/Header";
 import { Main } from "../components/Main";
-import { AccountSection } from "../components/sections/AccountSection";
-import { getCSSVariable } from "../utils/getCSSVariable";
 
 export const HomePage = async () => {
-    const app = document.querySelector("#app");
-
-    const account = await AccountSection();
-
-    const headerInstance = new Header({
-      backgroundColor: getCSSVariable("--color-turcoise"),
-      children: [account],
-      className: 'header__main',
-    });
+  const hallsSection = await Halls();
   
-    const header = headerInstance.getElement();
+  const main = await Main({
+    children: [hallsSection]
+  });
 
-    const hallsSection = await Halls(); 
-    const main = Main(hallsSection);
-
-    app?.append(header, main);
-    return app;
-
+  return main;
 };
 
 export default HomePage;

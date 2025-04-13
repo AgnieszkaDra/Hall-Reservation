@@ -1,5 +1,7 @@
+import Header from './components/header/Header';
 import HomePage from './pages/HomePage'
-import './styles/globals.scss'
+import './styles/_index.scss'
+import './styles/abstracts/_index.scss'
 
 async function renderApp() {
   const app = document.querySelector("#app");
@@ -7,10 +9,12 @@ async function renderApp() {
 
   app.innerHTML = ""; 
 
-  const homePage = await HomePage();
-  console.log(homePage, 'home page')
+  const header = new Header();  
+  const headerElement = await header.render();
+
+  const homePage = await HomePage();  
   if (homePage) {
-    app.append(homePage);
+    app.append(headerElement, homePage);
   }
 }
 

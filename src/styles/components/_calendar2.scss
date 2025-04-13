@@ -1,7 +1,7 @@
-@use './abstracts/index' as *;
+@use '../abstracts' as *;
 
 .calendar-modal {
-  background: $color-smokeWhite;
+  background: $smoke-white;
   padding: 20px;
   border-radius: 8px;
   width: 80%;

@@ -2,7 +2,7 @@ import { fetchData } from "../api/fetchData";
 import { Hall } from "../types/Hall";
 import createTitle from "../typography/createTitle";
 import { CalendarModal } from "./calendar/CalendarModal";
-import "../styles/main.scss";
+//import "../styles/main.scss";
 import { createLink } from "../ui/createLink";
 
 export const Halls = async (): Promise<HTMLElement> => {

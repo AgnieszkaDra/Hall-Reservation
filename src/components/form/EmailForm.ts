@@ -8,7 +8,7 @@ const required = new RequiredRule();
 const emailRule = new EmailRule();
 
 const email = new InputField(
-  { type: "email", name: "email", label: "E-mail" },
+  { type: "email", name: "emailUser", label: "E-mail" },
   [required, emailRule]
 );
 
@@ -22,5 +22,11 @@ EmailForm.addField(email, "dane logowanie");
 EmailForm.addField(buttonSend);  
 
 EmailForm.addActionAfterValidate(async () => {
-  await EmailForm.afterValidate();
+ 
+  const emailInput = document.querySelector('[name="emailUser"]') as HTMLInputElement;
+  const emailValue = emailInput?.value.trim() || "";
+
+  await EmailForm.afterValidate(emailValue);
 });
+
+// tutaj jest ważne żeby zapisywać pobrany i zwalidowany adres email i przekazać do afterValidate()

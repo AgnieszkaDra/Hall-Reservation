@@ -1,11 +1,11 @@
 import { navigate } from "../router/router";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import "../styles/form.scss";
-import { getCurrentUser } from "../utils/auth";
+//import "../styles/form.scss";
+import { getCurrentOrganizator } from "../utils/auth";
 import { LoginLink } from "./LoginLink";
 
 export const LoginUser = async (): Promise<HTMLElement> => {
-  const userLog = await getCurrentUser();
+  const userLog = await getCurrentOrganizator();
 
   const wrapper = document.createElement("div");
   wrapper.className = "loginIcon__wrapper";

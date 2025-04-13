@@ -1,7 +1,7 @@
 import { daysOfWeek } from "../../constants/daysOfWeek";
 import { monthNames } from "../../constants/monthNames";
 import { Hall } from "../../types/Hall";
-import "../../styles/calendar.scss";
+//import "../../styles/calendar.scss";
 import CloseButton from "../../ui/CloseButton";
 import CalendarNavigation from "../../ui/CalendarNavigation";
 import { fetchData } from "../../api/fetchData";

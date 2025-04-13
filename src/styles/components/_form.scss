@@ -1,0 +1,131 @@
+@use '../abstracts' as *;
+
+.forms {
+  
+    &__login, &__register {
+      display: none;
+      &.block {
+        @include flexAbsoluteCenter();
+        flex-direction: column;
+      }
+    }
+    &__title {
+      margin-bottom: map-get($spacing, small);
+    }
+    &__paragraph {
+      margin-bottom: map-get($spacing, small);
+    }
+  }
+
+
+.form {
+  width: 80%;
+  margin-bottom: map-get($spacing, medium);
+  @include flexAbsoluteCenter();
+  flex-direction: column;
+ 
+
+
+  &__button {
+    display: block;
+    width: 100%;
+    line-height: 1.6;
+    background-color: $brown;
+    color: $dark-gray;
+    font-size: map-get($font-size, extra-small);
+    padding: map-get($spacing, medium);
+    margin-top: map-get($spacing, medium);
+    box-sizing: border-box;
+    &--link {
+      text-decoration: underline;
+      color: $very-light-gray;
+      background-color: $dark-gray;
+      border: none;
+      font-size: map-get($font-size, extra-small);
+      margin-top: map-get($spacing, medium);
+      margin-bottom: map-get($spacing, medium);
+    }
+  }
+}
+
+.field {
+ 
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 24px;
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+.input {
+  //display: block;
+  //max-width: 300px;
+  width: 100%;
+  font-size: map-get($font-size, small);
+  margin-bottom: map-get($spacing, medium);
+  line-height: 1.6;
+  padding: map-get($spacing, medium);
+  border: 2px solid $dark-gray;
+  color: $light-gray;
+  box-sizing: border-box;
+  
+  &__label {
+    opacity: 0;
+    padding: .575rem .75rem;
+    max-width: 390px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: text;
+  }
+
+}
+
+.container {
+  &__register-success {
+     padding: 3rem 1.5rem;
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: $brown;
+  border-radius: 12px;
+  border: 2px solid $very-light-gray;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+    
+  }
+}
+
+.register-success {
+height: 70vh;
+ 
+  &__title {
+    font-size: 1.75rem;
+    color: $text;
+    margin-bottom: 1rem;
+  }
+  &__paragraph {
+    font-size: 1rem;
+    color: $text-lighten;
+    margin-bottom: 2rem;
+  }
+  &__link {
+    font-size: 1rem;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    &:hover {
+      color: #059669; /* darker emerald on hover */
+    }
+  }
+}
+
+
+
+

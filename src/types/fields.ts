@@ -1,3 +1,7 @@
+export interface FormField {
+  render(): HTMLElement;
+}
+
 export interface Field {
   config: {
     name: string;

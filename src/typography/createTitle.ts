@@ -15,7 +15,7 @@
 // export default Title;
 
 const createTitle = (
-  kind: 'h1' | 'h2' | 'h3' | 'h4' | 'h5',
+  kind: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'p',
   text: string,
   className: string
 ): HTMLHeadingElement => {

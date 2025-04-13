@@ -1,0 +1,10 @@
+@use '../abstracts' as *;
+
+@forward 'account';
+@forward 'calendar';
+@forward 'calendar2';
+@forward 'form';
+//@use './components/globals';
+@forward 'header';
+@forward 'link';
+@forward 'main';

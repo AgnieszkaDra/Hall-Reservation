@@ -1,0 +1,51 @@
+@use '../abstracts' as *;
+
+.account {
+    display: flex;
+    min-height: 100vh;
+    &__auth-form {
+        width: 100%;
+        min-height: 100vh;
+        background-color: $dark-gray;
+        @include flexAbsoluteCenter();
+        @include respond(tablet) {
+            width: 40%;
+        }
+    }
+    &__forms {
+        width: 60%;
+        border: 2px solid $very-light-gray;
+        color: $light-gray;
+    }
+    &__panel {
+        width: 60%;
+    }
+    &__link-home {
+        font-size: map-get($font-size, extra-small);
+        text-decoration: underline;
+        color: $very-light-gray;
+        align-self: flex-start;
+        display: block;
+        transform: translateY(-80px);
+      }
+    
+      &__login, &__register {
+        display: none;
+        &.block {
+          display: block;
+        }
+      }
+    
+        &__forms {
+            border: 2px solid $very-light-gray;
+            //min-height: 70vh;
+            
+            @media(min-width: 576px) {
+              margin: 30px auto;
+              padding: 40px;
+              border-radius: 3px;
+              padding-right: 15px;
+              padding-left: 15px;
+            }
+        }
+}

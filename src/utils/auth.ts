@@ -1,8 +1,8 @@
 import actualUser from "../api/actualUser";
-import loggedUser from "../api/loggedUser";
+import loggedUser from "../api/actualOrganizer";
 
-export async function getCurrentUser() {
-    const userLog = localStorage.getItem("currentUser");
+export async function getCurrentOrganizator() {
+    const userLog = localStorage.getItem("currentOrganizer");
     let userData = userLog ? JSON.parse(userLog) : null;
 
     if (userData) {

@@ -1,6 +1,7 @@
 import { AdminPage, NotFoundPage } from "../pages/pages";
 import { AuthFormWrapper } from "../components/form/AuthFormWrapper";
 import UserAccount from "../components/sections/UserAccount";
+import Account from "../panels/Account";
 
 type Route = {
   path: string;
@@ -10,13 +11,15 @@ type Route = {
 
 const routes: Route[] = [
   { path: "/admin", page: AdminPage },
-  { path: "/moje-konto", component: async () => (new AuthFormWrapper('email')).render() },
-  { path: "/moje-konto/:path", component: () => UserAccount() },
+  { path: "/moje-konto", component: () => Account('login') },
+  //{ path: "/moje-konto", component: async () => (new AuthFormWrapper('email')).render() },
+  { path: "/moje-konto/:path", component: () => UserAccount() }, // Dynamic route
 ];
 
 function matchRoute(path: string): { route: Route; param?: string } | undefined {
   for (const route of routes) {
     if (!route.path.includes(":")) {
+      console.log(route.path, path, 'path teraz')
       if (route.path === path) return { route };
     } else {
       const pattern = new RegExp(`^${route.path.replace(/:(\w+)/g, "([^/]+)")}$`);
@@ -32,12 +35,13 @@ function matchRoute(path: string): { route: Route; param?: string } | undefined 
 
 export async function navigate(path: string) {
   const content = document.getElementById("app");
-  console.log(content)
+
   if (!content) return;
 
   const matched = matchRoute(path);
-  console.log(matched)
+  console.log(matched, 'matched route')
   if (!matched) {
+    // If no route matches, load NotFoundPage
     content.innerHTML = NotFoundPage();
     return;
   }
@@ -45,25 +49,32 @@ export async function navigate(path: string) {
   const { route, param } = matched;
 
   try {
-    content.innerHTML = "";
+    content.innerHTML = ""; // Clear the existing content
+
     if (route.component) {
       const component = await route.component(param);
+
+      // Handle component rendering (string or HTMLElement)
       if (typeof component === "string") {
         content.innerHTML = component;
       } else {
         content.appendChild(component);
       }
     }
+
+    // Update the browser's URL
     window.history.pushState({}, "", path);
     window.dispatchEvent(new Event("locationChange"));
   } catch (error) {
     console.error("Error loading component:", error);
-    content.innerHTML = NotFoundPage();
+    content.innerHTML = NotFoundPage(); // Fallback to NotFoundPage in case of error
   }
 }
 
+// Listen for the initial page load and navigate accordingly
 document.addEventListener("DOMContentLoaded", () => navigate(window.location.pathname));
 
-
-
-
+// Handle navigation triggered by links or browser history state change
+window.addEventListener("popstate", () => {
+  navigate(window.location.pathname);
+});

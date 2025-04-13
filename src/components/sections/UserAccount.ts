@@ -1,7 +1,7 @@
 import userList from '../../fields/userList';
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import '../../styles/main.scss';
-import { getCurrentUser } from '../../utils/auth';
+//import '../../styles/main.scss';
+import { getCurrentOrganizator } from '../../utils/auth';
 import createTitle from '../../typography/createTitle';
 import { LoginLink } from '../../ui/LoginLink';
 
@@ -9,7 +9,7 @@ export const UserAccount = async (): Promise<HTMLElement> => {
   const container = document.createElement('div');
   container.className = 'container';
 
-  const userLog = await getCurrentUser();
+  const userLog = await getCurrentOrganizator();
 
   const wrapper = document.createElement('div');
   wrapper.className = 'account';
@@ -62,7 +62,7 @@ export const UserAccount = async (): Promise<HTMLElement> => {
     link.addEventListener("click", (event: MouseEvent) => {
       if (item.name !== "Strona główna") {
         if (item.name === 'Wyloguj') {
-          localStorage.removeItem("currentUser");
+          localStorage.removeItem("currentOrganizer");
         }
       }
     });

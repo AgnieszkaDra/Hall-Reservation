@@ -1,11 +1,11 @@
 import { BACK_END_URL } from "../constants/api";
 import { User } from "../types/User";
 
-export async function loggedUser(user: User): Promise<User> {
+export async function actualOrganizer(user: User): Promise<User> {
   
     const updatedUser = { ...user, lastLogin: new Date().toISOString() };
     
-    const response = await fetch(`${BACK_END_URL}/loggedUser`, {
+    const response = await fetch(`${BACK_END_URL}/actualOrganizer`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedUser),
@@ -16,5 +16,5 @@ export async function loggedUser(user: User): Promise<User> {
     return updatedUser; 
 }
 
-export default loggedUser;
+export default actualOrganizer;
   

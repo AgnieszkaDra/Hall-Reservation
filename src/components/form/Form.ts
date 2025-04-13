@@ -1,7 +1,9 @@
-import loggedUser from "../../api/loggedUser";
+import { actualOrganizer } from "../../api/actualOrganizer";
+import actualUser from "../../api/actualUser";
 import { checkIfExists } from "../../fields/rules/Organizer";
 import { Field } from "../../types/fields";
 import { User } from "../../types/User";
+import { getActualUser, getCurrentOrganizator } from "../../utils/auth";
 import { AuthFormWrapper } from "./AuthFormWrapper";
 
 interface FieldGroup {
@@ -16,6 +18,7 @@ export class Form {
   protected fieldGroups: FieldGroup[] = [];
   protected formElement: HTMLFormElement;
   protected formData: Record<string, string | number> = {};
+  protected actionsBeforeValidate: FormAction[] = [];
   protected actionsAfterValidate: FormAction[] = [];
 
   constructor(name: string) {
@@ -35,6 +38,10 @@ export class Form {
     }
   }
 
+  addActionBeforeValidate(action: FormAction): void {
+    this.actionsBeforeValidate.push(action);
+  }
+
   addActionAfterValidate(action: FormAction): void {
     this.actionsAfterValidate.push(action);
   }
@@ -42,15 +49,13 @@ export class Form {
   private async handleSubmit(event: Event): Promise<void> {
     event.preventDefault();
 
-    // Validate fields
     const isValid = await this.validateFields();
     if (!isValid) return;
 
     this.collectFormData();
 
-    // Call afterValidate actions if defined
     for (const action of this.actionsAfterValidate) {
-      await action(this.formData);  // This will call the action, which includes afterValidate
+      await action(this.formData); 
     }
   }
 
@@ -102,28 +107,58 @@ export class Form {
     return errorElement;
   }
 
-  public async afterValidate(): Promise<void> {
-    const emailInput = this.getFieldInputElement("email") as HTMLInputElement;
-    const emailValue = emailInput?.value.trim() || "";
+  public async beforeValidate(): Promise<void> {
+     try {
+        const [organizerLog, userLog] = await Promise.all([getCurrentOrganizator(), getActualUser()]);
+        const user = []
+        const loggedInUser = userLog || organizerLog;
+    
+        if (loggedInUser) {
+          console.log(loggedInUser)
+          const [existingOrganizer, existingUser] = await Promise.all([
+            checkIfExists<User>("organizers", "email", loggedInUser.email),
+            checkIfExists<User>("users", "email", loggedInUser.email)
+          ]);
+    
+          if (existingOrganizer ) {
+            user.push(existingOrganizer);
+            console.log(user[0]?.email); ///
+          } else if(existingUser){
+            user.push(existingUser);
+            console.log(user[0]?.email); ///
+          }
+                
+        } else {
+          console.log("No user is logged in.");
+         
+        }
+      } catch (error) {
+        console.error("Error while checking user login:", error);
+      }
+  }
 
+  public async afterValidate(value: string): Promise<void> {
     try {
-      const existingOrganizer = await checkIfExists<User>("organizers", "email", emailValue);
+    
+      const existingOrganizer = await checkIfExists<User>("organizers", "email", value);
       if (existingOrganizer) {
-        const updatedUser = await loggedUser(existingOrganizer);
-        localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+        const organizer = await actualOrganizer(existingOrganizer);
+        localStorage.setItem("currentOrganizer", JSON.stringify(organizer));
         this.showLoginForm();
         return;
       }
-
-      const existingUser = await checkIfExists<User>("users", "email", emailValue);
+  
+      const existingUser = await checkIfExists<User>("users", "email", value);
       if (existingUser) {
-        console.log(existingUser)
+        const user = await actualUser(existingUser);
+        localStorage.setItem("actualUser", JSON.stringify(user));
         this.showLoginForm();
       } else {
         this.showRegisterForm();
       }
-
-      localStorage.setItem("actualEmail", JSON.stringify(emailValue));
+  
+  
+      //localStorage.setItem("actualEmail", JSON.stringify(value));
     } catch (error) {
       console.error("Error validating email existence:", error);
     }
@@ -155,7 +190,7 @@ export class Form {
     }
   }
 
-  generate(): HTMLElement {
+  async generate(): Promise<HTMLElement> {
     this.formElement.innerHTML = "";
 
     this.fieldGroups.forEach((group) => {
@@ -179,10 +214,14 @@ export class Form {
       this.formElement.appendChild(groupWrapper);
     });
 
+    for (const action of this.actionsBeforeValidate) {
+      await action(this.formData);  // This will call the action, which includes afterValidate
+    }
+
     return this.formElement;
   }
 
-  render(): HTMLElement {
-    return this.generate();
+  async render(): Promise<HTMLElement> {
+    return await this.generate();
   }
 }

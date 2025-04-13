@@ -1,10 +1,9 @@
 import { daysOfWeek } from "../../constants/daysOfWeek";
 import { monthNames } from "../../constants/monthNames";
 import { Hall } from "../../types/Hall";
-import "../../styles/calendar2.scss";
+//import "../../styles/calendar2.scss";
 import CloseButton from "../../ui/CloseButton";
 import CalendarNavigation from "../../ui/CalendarNavigation";
-import { fetchHalls } from "../../api/fetchHalls";
 
 
 const isHallOpenOnDay = (hall: Hall, date: Date): boolean => {

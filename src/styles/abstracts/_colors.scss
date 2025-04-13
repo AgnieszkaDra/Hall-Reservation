@@ -4,13 +4,13 @@
 $white: #ffffff;
 $smoke-white: #f5f5f5;
 $very-light-gray: #e6e6e6;
-$light-gray: #afafaf;
-$dark-gray: #383734;
+$light-gray: rgb(231, 231, 231);
+$dark-gray: rgb(42, 42, 42);
 
 // Turquoise Variants
-$turquoise: #228cac;
-$turquoise-darken: color.adjust($turquoise, $lightness: -2%);
-$turquoise-lighten: color.adjust($turquoise, $lightness: 5%);
+$brown: rgb(199, 169, 115);
+$brown-darken: color.adjust($brown, $lightness: -2%);
+$brown-lighten: color.adjust($brown, $lightness: 5%);
 
 // Navy Variants
 $navy: #2a2b47;
@@ -18,7 +18,7 @@ $navy-lighten: color.adjust($navy, $lightness: 65%);
 
 // Other Colors
 $green: #00a34b;
-$red: #7b151b;
+$red: rgb(158, 56, 61);
 
 // Text Colors
 $text: #444444;
@@ -33,9 +33,9 @@ $text-lighten: color.adjust($text, $lightness: 2%);
   --color-dark-gray: #383734;
 
   // Turquoise Variants
-  --color-turquoise: #228cac;
-  --color-turquoise-darken: #{$turquoise-darken};
-  --color-turquoise-lighten: #{$turquoise-lighten};
+  --color-brown: #228cac;
+  --color-brown-darken: #{$brown-darken};
+  --color-brown-lighten: #{$brown-lighten};
 
   // Navy Variants
   --color-navy: #2a2b47;

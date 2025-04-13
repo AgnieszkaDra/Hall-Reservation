@@ -1,23 +1,19 @@
-import { Halls } from "./Halls";
+import { MainOptions } from "../types/interfaces/components";
 
-// export const Main = async ('halls') => {
-//   const main = document.createElement("main");
-//   main.classList.add("main");
+export async function Main({ className = '', children = [] }: MainOptions): Promise<HTMLElement> {
+  const main = document.createElement('main');
+  main.classList.add('main');
 
-//   const hallsSection = await Halls(); 
-//   main.append(hallsSection);
+  const container = document.createElement("div");
+  container.className = "container";
+  if (className) {
+    container.classList.add(className);
+  }
 
-//   return main;
-// };
+  const resolvedChildren = await Promise.all(children);
+  resolvedChildren.forEach(child => container.appendChild(child));
 
-export const Main = (...children: (HTMLElement | Promise<HTMLElement>)[]) => {
-  const main = document.createElement("main");
-  main.classList.add("main");
-
-  children.forEach(async (child) => {
-    const resolvedChild = await child; 
-    main.append(resolvedChild);
-  });
+  main.appendChild(container); 
 
   return main;
-};
+}
