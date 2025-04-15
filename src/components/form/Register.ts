@@ -1,69 +1,56 @@
-import { Form } from "./Form";
-import { InputField } from "../../ui/fields/InputField";
-import { SelectField } from "../../ui/fields/SelectField";
-import { ButtonField } from "../../ui/ButtonField";
-import { RequiredRule } from "../../fields/rules/RequiredRule";
-import { LengthRule } from "../../fields/rules/LengthRule";
-import { fetchCommunions } from "../../api/fetchCommunions";
+
 import createTitle from "../../typography/createTitle";
 import { Field } from "../../types/fields";
-import { AuthFormWrapper } from "./AuthFormWrapper";
+import { authWrapper } from "../../shared/authWrapper";
+import { email, password } from "../../ui/fields/formFields";
+import { InputField } from "../../ui/fields/InputField";
 
-const required = new RequiredRule();
-const lengthRule = (amount: number) => new LengthRule(amount);
-
-const nameField = new InputField(
-  { type: "text", name: "name", label: "Imię i Nazwisko" },
-  [required, lengthRule(3)]
-);
-
-const cityField = new InputField(
-  { type: "text", name: "miasto", label: "Miasto" },
-  [required, lengthRule(4)]
-);
-
-const buttonRegister = new ButtonField(
-  { type: "submit", name: "registerButton", label: "Zarejestruj się" }
-);
-
-export const RegisterForm = async () => {
-  const communionOptions = await fetchCommunions();
-
-  const communionField = new SelectField({
-    name: "communion",
-    label: "Wybierz wspólnotę",
-    type: "select",
-    options: communionOptions,
-  });
-
-  const registerForm = new Form("register");
-  registerForm.addField(nameField);
-  registerForm.addField(cityField);
-  registerForm.addField(communionField);
-  registerForm.addField(buttonRegister);
-
-  return registerForm;
-};
+interface FieldGroup {
+  name: string;
+  fields: Field[];
+}
 
 export class Register {
   private container: HTMLElement;
-  protected fields: Field[];
+  protected fields: InputField[];
 
-  constructor(fields: Field[]) {
+  constructor(fields: InputField[]) {
     this.container = document.querySelector(".forms__register") || document.createElement("div");
-   //this.container.className = "forms__register block";
     this.fields = fields;
   }
 
-  generate() {
+  validateFields(): boolean {
+    let isValid = true;
+  
+    this.fields.forEach((field) => {
+      console.log(field)
+      const value = field.getValue();
+      const failedRules = field.rules?.filter(rule => !rule.validate(value)) || [];
+  
+      const errors = failedRules.map(rule => rule.getErrorMessage());
+      console.log(errors)
+  
+      if (typeof field.showErrors === 'function') {
+        field.showErrors(errors);
+      }
+  
+      if (errors.length > 0) {
+        isValid = false;
+      }
+    });
+  
+    return isValid;
+  }
+
+  async generate() {
     this.container.innerHTML = "";
-    console.log(this.container)
-     if (this.container) {
+
+    if (this.container) {
       this.container.classList.add('block');
     }
 
-    const title = createTitle('h2', 'Rejestracja', 'container__title');
-    const subtitle = createTitle('p', 'Wypełnij dane, aby się zarejestrować', 'container__paragraph');
+    const title = createTitle('h2', 'Rejestracja', 'forms__title');
+    const subtitle = createTitle('p', 'Wypełnij dane, aby się zarejestrować', 'forms__paragraph');
 
     const form = document.createElement("form");
     form.className = "form";
@@ -71,42 +58,44 @@ export class Register {
     this.fields.forEach(field => {
       form.appendChild(field.createElement());
     });
-  
+
     const registerButton = document.createElement('button');
-    registerButton.className = 'form__foot__link';
+    registerButton.className = 'form__button';
     registerButton.textContent = 'Zarejestruj się';
     registerButton.type = 'submit';
 
     registerButton.addEventListener('click', (event) => {
       event.preventDefault();
-      console.log("Registering with data...");
+      const isValid = this.validateFields();
+
+      if (isValid) {
+        console.log("All fields are valid! Submitting form...");
+        // 🔥 Here you could call a submit function or show success message
+      } else {
+        console.warn("Some fields are invalid.");
+      }
     });
 
-    const registerTitle = createTitle('p', 'Masz już konto? ', 'container__paragraph');
-    const loginButton = document.createElement('button');
-    loginButton.className = 'form__foot__link';
-    loginButton.textContent = 'Zaloguj się';
-    loginButton.type = 'button';
+    const registerParagraph = createTitle('p', 'Masz już konto? ', 'container__paragraph');
+    const loginLink = document.createElement('a');
+    loginLink.className = 'form__link';
+    loginLink.textContent = 'Zaloguj się';
+    
+    loginLink.addEventListener('click', async () => {
+      const containerForms = document.querySelector('.account__auth-form');
 
-    loginButton.addEventListener('click', async () => {
-      
-      const containerRegister = document.querySelector('.forms__register');
-      const containerForms = document.querySelector('.account');
-        if (containerRegister) {
-            containerRegister.classList.toggle('block');
-            const authForm = new AuthFormWrapper('login');  
-            const authFormLogin = authForm.render();
-              
-              if (containerForms) {
-                containerForms.innerHTML = ''; 
-                containerForms.appendChild(await authFormLogin); 
-              }
-            }
+      if (containerForms) {
+         authWrapper.setType('login', [email, password]);
+        //authWrapper.setType('login');
+        const newContent = await authWrapper.render();
+        containerForms.replaceWith(newContent);
+      }
     });
 
-    registerTitle.appendChild(loginButton);
+    registerParagraph.appendChild(loginLink);
 
-    this.container.append(title, subtitle, form, registerTitle);
+    form.appendChild(registerButton);
+    this.container.append(title, subtitle, form, registerParagraph);
     return this.container;
   }
 
@@ -114,3 +103,4 @@ export class Register {
     return this.generate();
   }
 }
+

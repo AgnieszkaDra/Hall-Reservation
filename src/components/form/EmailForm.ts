@@ -1,4 +1,4 @@
-import { Form } from "./Form";
+import { Form } from "./Form2";
 import { InputField } from "../../ui/fields/InputField";
 import { ButtonField } from "../../ui/ButtonField";
 import { RequiredRule } from "../../fields/rules/RequiredRule";

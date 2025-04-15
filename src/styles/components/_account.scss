@@ -3,22 +3,30 @@
 .account {
     display: flex;
     min-height: 100vh;
+    color: $light-gray;
     &__auth-form {
         width: 100%;
         min-height: 100vh;
         background-color: $dark-gray;
         @include flexAbsoluteCenter();
         @include respond(tablet) {
-            width: 40%;
+          width: 60%;
+        }
+        @include respond(tablet) {
+          width: 40%;
         }
     }
     &__forms {
-        width: 60%;
-        border: 2px solid $very-light-gray;
-        color: $light-gray;
+      width: 60%;
+      border: 2px solid $very-light-gray;
     }
     &__panel {
-        width: 60%;
+      width: 60%;
+      min-height: 100vh;
+      align-self: flex-start;
+      text-align: center; 
+      padding-top: map-get($spacing, large);
+      background-color: $brown;
     }
     &__link-home {
         font-size: map-get($font-size, extra-small);

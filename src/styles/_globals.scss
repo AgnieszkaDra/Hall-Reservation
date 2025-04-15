@@ -40,30 +40,15 @@ img {
 }
 
 .container {
-  // @include respond(mobile){
-  //   max-width: 540px;
-  // }
-  // @include respond(tablet){
-  //   flex-direction: row;
-  //   max-width: 720px;
-  // }
-  // @include respond(tablet){
-  //   max-width: 960px;
-  // }
- 
   max-width: 100%;
   min-height: 100vh;
-  //height: 100%;
   margin-left: auto;
   margin-right: auto;
-  padding-top: 5rem;
-  padding-bottom: 1rem;
-  
+  box-sizing: border-box; //dlaczego
+ 
   @include respond(tablet){
     padding-top: 0;
     padding-bottom: 0;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
     flex-direction: row
   }
   @include flexAbsoluteCenter();

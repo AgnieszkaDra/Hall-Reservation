@@ -3,7 +3,7 @@ import { Rule } from "./Rule";
 export class PasswordRepeatRule extends Rule {
     private originalPassword: string;
 
-    constructor(originalPassword: string) {
+    constructor(originalPassword: string='') {
         super();
         this.originalPassword = originalPassword;
     }

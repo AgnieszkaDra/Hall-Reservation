@@ -23,8 +23,6 @@
   margin-bottom: map-get($spacing, medium);
   @include flexAbsoluteCenter();
   flex-direction: column;
- 
-
 
   &__button {
     display: block;
@@ -36,15 +34,14 @@
     padding: map-get($spacing, medium);
     margin-top: map-get($spacing, medium);
     box-sizing: border-box;
-    &--link {
-      text-decoration: underline;
-      color: $very-light-gray;
-      background-color: $dark-gray;
-      border: none;
-      font-size: map-get($font-size, extra-small);
-      margin-top: map-get($spacing, medium);
-      margin-bottom: map-get($spacing, medium);
-    }
+    
+  }
+  &__link {
+    color: $smoke-white;
+    text-decoration: underline;
+    font-size: map-get($font-size, extra-small);
+    margin-top: map-get($spacing, medium);
+    margin-bottom: map-get($spacing, medium);
   }
 }
 
@@ -60,6 +57,19 @@
     align-items: center;
     flex-direction: column;
 
+}
+
+.field__errors {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: 4px;
+  padding-left: 0;
+  list-style: none;
+}
+
+.field__errors li::before {
+  content: "⚠ ";
+  margin-right: 4px;
 }
 
 .input {

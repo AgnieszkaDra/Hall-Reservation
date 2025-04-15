@@ -15,6 +15,8 @@ export interface Field {
   };
   errors: string[];
   validate?(value: string): boolean;
+  getValue(): string;
+  //showErrors(errors: string[]): void;
   createElement(): HTMLElement;
 }
 

@@ -1,45 +1,39 @@
-import { Form } from "./Form";
-import { InputField } from "../../ui/fields/InputField";
-import { RequiredRule } from "../../fields/rules/RequiredRule";
-import { PasswordRule } from "../../fields/rules/PasswordRule";
-import { ButtonField } from "../../ui/ButtonField";
-import { EmailRule } from "../../fields/rules/EmailRule";
 import createTitle from "../../typography/createTitle";
-import { Field } from "../../types/fields";
-import { AuthFormWrapper } from "./AuthFormWrapper";
-import Account from "../../panels/Account";
-
-const required = new RequiredRule();
-const passwordRule = new PasswordRule();
-const emailRule = new EmailRule();
-
-const email = new InputField(
-  { type: "email", name: "emailUser", label: "E-mail" },
-  [required, emailRule]
-);
-
-const password = new InputField(
-  { type: "password", name: "password", label: "Hasło" },
-  [required, passwordRule]
-);
-
-const button = new ButtonField(
-  { type: "submit", name: "buttonSend", label: "Zaloguj się" }
-);
-
-export const LoginForm = new Form("login");
-LoginForm.addField(email);
-LoginForm.addField(password);
-LoginForm.addField(button);
+import { authWrapper } from "../../shared/authWrapper";
+import { email, password } from "../../ui/fields/formFields";
+import { InputField } from "../../ui/fields/InputField";
 
 export class Login {
   private container: HTMLElement;
-  protected fields: Field[];
+  protected fields: InputField[];
 
-  constructor(fields: Field[]) {
+  constructor(fields: InputField[]) {
     this.container = document.querySelector(".forms__login") || document.createElement("div");
   
     this.fields = fields;
+  }
+
+  validateFields(): boolean {
+    let isValid = true;
+  
+    this.fields.forEach((field) => {
+      console.log(field)
+      const value = field.getValue();
+      const failedRules = field.rules?.filter(rule => !rule.validate(value)) || [];
+  
+      const errors = failedRules.map(rule => rule.getErrorMessage());
+      console.log(errors)
+  
+      if (typeof field.showErrors === 'function') {
+        field.showErrors(errors);
+      }
+  
+      if (errors.length > 0) {
+        isValid = false;
+      }
+    });
+  
+    return isValid;
   }
 
   generate() {
@@ -51,36 +45,66 @@ export class Login {
     const form = document.createElement("form");
     form.className = "form";
 
+    const loginButton = document.createElement('button');
+    loginButton.className = 'form__button';
+    loginButton.textContent = 'Zaloguj się';
+    loginButton.type = 'submit';
+
     this.fields.forEach(field => {
       form.appendChild(field.createElement());
+      
     });
 
-    const registerTitle = createTitle('p', 'Nie masz konta? ', 'forms__paragraph');
-    const registerButton = document.createElement('button');
-    registerButton.className = 'form__button--link';
-    registerButton.textContent = 'Zarejestruj się';
-    registerButton.type = 'button';
+    form.appendChild(loginButton)
 
-    registerButton.addEventListener('click', async () => {
-      const containerLogin = document.querySelector('.forms__login');
-    
-      const containerForms = document.querySelector('.account');
+   
 
-      if (containerLogin) {
-        containerLogin.classList.toggle('block');
-        const authForm = new AuthFormWrapper('register');  
-        const authFormRendered = authForm.render();
-       
-        if (containerForms) {
-          containerForms.innerHTML = ''; 
-          containerForms.appendChild(await authFormRendered); 
-        }
+    loginButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      const isValid = this.validateFields();
+
+      if (isValid) {
+        console.log("All fields are valid! Submitting form...");
+        // 🔥 Here you could call a submit function or show success message
+      } else {
+        console.warn("Some fields are invalid.");
       }
     });
 
-    registerTitle.appendChild(registerButton);
+    const registerTitle = createTitle('p', 'Nie masz konta? ', 'forms__paragraph');
+    const registerLink = document.createElement('a');
+    registerLink.className = 'form__link';
+    registerLink.textContent = 'Zarejestruj się';
+    registerLink.type = 'a';
 
-    this.container.append(title, subtitle, form, registerTitle);
+    // registerButton.addEventListener('click', async () => {
+    //   const containerLogin = document.querySelector('.forms__login');
+    //   const containerForms = document.querySelector('.account__auth-form');
+
+    //   if (containerLogin) {
+    //     containerLogin.classList.toggle('block');
+    //     const authForm = new AuthFormWrapper('register').render()
+      
+    //     if (containerForms) {
+    //       containerForms.innerHTML = ''; 
+    //       containerForms.appendChild(await authForm); 
+    //     }
+    //   }
+    // });
+    registerLink.addEventListener('click', async () => {
+      const containerForms = document.querySelector('.account__auth-form');
+    
+      if (containerForms) {
+        authWrapper.setType('register', [email, password]);
+        // add there addField([email, password])
+        console.log(authWrapper)
+        const newContent = await authWrapper.render();
+        containerForms.replaceWith(newContent); // clean replace
+      }
+    });
+    registerTitle.appendChild(registerLink);
+
+    this.container.append(title, subtitle, form, loginButton, registerTitle);
     return this.container;
   }
 

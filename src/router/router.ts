@@ -1,7 +1,8 @@
 import { AdminPage, NotFoundPage } from "../pages/pages";
 import { AuthFormWrapper } from "../components/form/AuthFormWrapper";
 import UserAccount from "../components/sections/UserAccount";
-import Account from "../panels/Account";
+import { Account } from "../panels/Account";
+import { email, password } from "../ui/fields/formFields";
 
 type Route = {
   path: string;
@@ -11,7 +12,7 @@ type Route = {
 
 const routes: Route[] = [
   { path: "/admin", page: AdminPage },
-  { path: "/moje-konto", component: () => Account('login') },
+  { path: "/moje-konto", component: () => Account({ type: 'login', fields: [email, password] }) },
   //{ path: "/moje-konto", component: async () => (new AuthFormWrapper('email')).render() },
   { path: "/moje-konto/:path", component: () => UserAccount() }, // Dynamic route
 ];
